@@ -211,63 +211,65 @@ header {
     <img src="logo.png" alt="PERSONA" class="logo-img" onerror="this.src='https://placehold.co/150x40/0b0d12/e3001b?text=PERSONA';">
     <div class="logo-text" style="line-height:1.2">
       <div style="font-size:15px; font-weight:800; letter-spacing:0.5px">盛源 <em>PERSONA</em></div>
-      <div style="font-size:10px; color:var(--muted); letter-spacing:0.5px">LED 電視牆 · 專業顯示方案</div>
+      <div style="font-size:10px; color:var(--muted); letter-spacing:0.5px" data-zh="LED 電視牆 · 專業顯示方案" data-en="LED Video Wall · Pro Solutions">LED 電視牆 · 專業顯示方案</div>
     </div>
   </div>
 
   <div class="header-actions">
     <div class="lang-toggle">
-      <button class="lang-btn active">中文</button>
-      <button class="lang-btn">EN</button>
+      <button class="lang-btn active" id="btn-zh" onclick="changeLang('zh', this)">中文</button>
+      <button class="lang-btn" id="btn-en" onclick="changeLang('en', this)">EN</button>
     </div>
     <button class="hdr-btn btn-line" onclick="window.open('https://line.me/R/ti/p/@touchpersona', '_blank')">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.89c.50 0 .907.41.907.91s-.407.91-.907.91H17.59v1.077h1.775c.50 0 .907.41.907.91s-.407.91-.907.91H16.68a.908.908 0 0 1-.907-.91V9.89c0-.50.407-.91.907-.91h2.685zm-5.07 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91s-.907-.41-.907-.91V9.89c0-.5.407-.91.907-.91zm-2.235 0c.5 0 .907.41.907.91v2.43l-1.866-2.924a.91.91 0 0 0-.769-.416.908.908 0 0 0-.907.91v3.808c0 .5.407.91.907.91s.907-.41.907-.91v-2.43l1.866 2.924c.17.267.463.416.769.416.5 0 .907-.41.907-.91V9.89c0-.5-.407-.91-.907-.91zm-4.16 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91H5.214a.908.908 0 0 1-.907-.91V9.89c0-.5.407-.91.907-.91H7.9zM12 2C6.477 2 2 6.145 2 11.25c0 4.537 3.646 8.346 8.57 9.098.334.072.786.22.9.505.103.259.067.665.033.927l-.147.868c-.045.258-.207 1.01.885.55 1.092-.458 5.89-3.465 8.036-5.931C21.456 15.43 22 13.41 22 11.25 22 6.145 17.523 2 12 2z"/></svg>
-      <span>LINE 洽詢</span>
+      <span data-zh="LINE 洽詢" data-en="LINE Chat">LINE 洽詢</span>
     </button>
     <button class="hdr-btn btn-pdf" id="btnExport" onclick="exportPDF()">
       <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/></svg>
-      <span>匯出規格書</span>
+      <span data-zh="匯出規格書" data-en="Export PDF">匯出規格書</span>
     </button>
-    <button class="hdr-btn btn-primary" onclick="openContact()">✉ 聯繫我們</button>
+    <button class="hdr-btn btn-primary" onclick="openContact()">
+      ✉ <span data-zh="聯繫我們" data-en="Contact Us">聯繫我們</span>
+    </button>
   </div>
 </header>
 
 <main class="app">
   <aside class="left-panel">
     <div class="left-scroll">
-      <div class="section-title">產品系列</div>
+      <div class="section-title" data-zh="產品系列" data-en="Series">產品系列</div>
       <div class="series-tabs">
         <button class="series-btn active" data-series="indoor_cob" onclick="selectSeries('indoor_cob', this)">
-          <span class="dot" style="background:#007aff"></span>室內 COB
+          <span class="dot" style="background:#007aff"></span><span data-zh="室內 COB" data-en="Indoor COB">室內 COB</span>
         </button>
         <button class="series-btn" data-series="indoor_smd" onclick="selectSeries('indoor_smd', this)">
-          <span class="dot" style="background:#32d74b"></span>室內 SMD
+          <span class="dot" style="background:#32d74b"></span><span data-zh="室內 SMD" data-en="Indoor SMD">室內 SMD</span>
         </button>
         <button class="series-btn" data-series="outdoor_smd" onclick="selectSeries('outdoor_smd', this)">
-          <span class="dot" style="background:#ffd60a"></span>戶外 SMD
+          <span class="dot" style="background:#ffd60a"></span><span data-zh="戶外 SMD" data-en="Outdoor SMD">戶外 SMD</span>
         </button>
       </div>
 
-      <div class="section-title">像素間距 選擇</div>
+      <div class="section-title" data-zh="像素間距 選擇" data-en="Pixel Pitch Selection">像素間距 選擇</div>
       <div id="pitchGrid" class="pitch-grid"></div>
 
-      <div class="section-title">螢幕需求尺寸</div>
+      <div class="section-title" data-zh="螢幕需求尺寸" data-en="Screen Required Size">螢幕需求尺寸</div>
       <div class="field-group">
-        <label class="field-label">寬度 Width</label>
+        <label class="field-label" data-zh="寬度 Width" data-en="Width (m)">寬度 Width</label>
         <div class="field-input">
           <input type="number" id="inW" value="3.0" step="0.1" oninput="update()">
           <div class="field-unit">m</div>
         </div>
       </div>
       <div class="field-group">
-        <label class="field-label">高度 Height</label>
+        <label class="field-label" data-zh="高度 Height" data-en="Height (m)">高度 Height</label>
         <div class="field-input">
           <input type="number" id="inH" value="2.0" step="0.1" oninput="update()">
           <div class="field-unit">m</div>
         </div>
       </div>
       <div class="ratio-row">
-        <span style="font-size:10px; color:var(--muted)">比例：</span>
+        <span style="font-size:10px; color:var(--muted)" data-zh="比例：" data-en="Ratio:">比例：</span>
         <button class="ratio-btn" onclick="applyRatio(16/9, this)">16:9</button>
         <button class="ratio-btn" onclick="applyRatio(4/3, this)">4:3</button>
         <button class="ratio-btn" onclick="applyRatio(21/9, this)">21:9</button>
@@ -275,29 +277,29 @@ header {
         <button class="ratio-btn" onclick="applyRatio(9/16, this)">9:16</button>
       </div>
 
-      <div class="section-title">📐 場域牆壁實際尺寸</div>
+      <div class="section-title" data-zh="📐 場域牆壁實際尺寸" data-en="📐 Wall Dimensions">📐 場域牆壁實際尺寸</div>
       <div class="field-group" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
         <div class="field-input"><input type="number" id="wallW" value="6.0" oninput="update()"><div class="field-unit">m</div></div>
         <div class="field-input"><input type="number" id="wallH" value="3.5" oninput="update()"><div class="field-unit">m</div></div>
       </div>
 
-      <div class="section-title">供電電壓</div>
+      <div class="section-title" data-zh="供電電壓" data-en="Power Supply">供電電壓</div>
       <div class="volt-row">
         <button class="volt-btn active" onclick="setVolt(110, this)">🔌 110V</button>
         <button class="volt-btn" onclick="setVolt(220, this)">⚡ 220V</button>
       </div>
 
-      <div class="section-title">目前選擇規格</div>
+      <div class="section-title" data-zh="目前選擇規格" data-en="Current Specifications">目前選擇規格</div>
       <table class="spec-mini">
-        <tr><td>系列</td><td id="sp-series">-</td></tr>
-        <tr><td>像素間距</td><td id="sp-pitch">-</td></tr>
-        <tr><td>模組尺寸</td><td id="sp-modSize">-</td></tr>
-        <tr><td>模組解析度</td><td id="sp-modRes">-</td></tr>
-        <tr><td>像素密度</td><td id="sp-density">-</td></tr>
-        <tr><td>亮度</td><td id="sp-bright">-</td></tr>
-        <tr><td>視角</td><td id="sp-angle">-</td></tr>
-        <tr><td>功耗 (Avg/Max)</td><td id="sp-pwr">-</td></tr>
-        <tr><td>最大電流需求</td><td id="sp-amp" style="color:var(--yellow)">-</td></tr>
+        <tr><td data-zh="系列" data-en="Series">系列</td><td id="sp-series">-</td></tr>
+        <tr><td data-zh="像素間距" data-en="Pixel Pitch">像素間距</td><td id="sp-pitch">-</td></tr>
+        <tr><td data-zh="模組尺寸" data-en="Module Size">模組尺寸</td><td id="sp-modSize">-</td></tr>
+        <tr><td data-zh="模組解析度" data-en="Module Resolution">模組解析度</td><td id="sp-modRes">-</td></tr>
+        <tr><td data-zh="像素密度" data-en="Pixel Density">像素密度</td><td id="sp-density">-</td></tr>
+        <tr><td data-zh="亮度" data-en="Brightness">亮度</td><td id="sp-bright">-</td></tr>
+        <tr><td data-zh="水平/垂直視角" data-en="H/V Angle">水平/垂直視角</td><td id="sp-angle">-</td></tr>
+        <tr><td data-zh="平均/最大功耗" data-en="Avg/Max Power">平均/最大功耗</td><td id="sp-pwr">-</td></tr>
+        <tr><td data-zh="最大電流需求" data-en="Max Current">最大電流需求</td><td id="sp-amp" style="color:var(--yellow)">-</td></tr>
       </table>
 
       <div class="info-box" id="infoBox"></div>
@@ -308,19 +310,21 @@ header {
     <div class="canvas-wrap" id="cvsWrap">
       <canvas id="mainCanvas"></canvas>
       <div class="upload-btn-wrap">
-        <button class="upload-btn" onclick="document.getElementById('fileIn').click()">📷 上傳背景圖</button>
+        <button class="upload-btn" onclick="document.getElementById('fileIn').click()">
+          📷 <span data-zh="上傳背景圖" data-en="Upload Background">上傳背景圖</span>
+        </button>
         <input type="file" id="fileIn" hidden accept="image/*" onchange="loadBg(this)">
       </div>
     </div>
 
     <div class="results-bar">
-      <div class="res-item"><span class="res-val red" id="res-modules">-</span><span class="res-lbl">模組配置 W×H</span></div>
-      <div class="res-item"><span class="res-val red" id="res-total">-</span><span class="res-lbl">模組總數</span></div>
-      <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl">畫面解析度 px</span></div>
-      <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl">實際尺寸 m</span></div>
-      <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl">對角線 吋</span></div>
-      <div class="res-item"><span class="res-val green" id="res-power">-</span><span class="res-lbl">估算功耗 (Avg/Max)</span></div>
-      <div class="res-item"><span class="res-val" id="res-dist">-</span><span class="res-lbl">最近觀賞距離</span></div>
+      <div class="res-item"><span class="res-val red" id="res-modules">-</span><span class="res-lbl" data-zh="模組配置 W×H" data-en="Modules W×H">模組配置 W×H</span></div>
+      <div class="res-item"><span class="res-val red" id="res-total">-</span><span class="res-lbl" data-zh="模組總數" data-en="Total Modules">模組總數</span></div>
+      <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl" data-zh="畫面解析度 px" data-en="Resolution px">畫面解析度 px</span></div>
+      <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl" data-zh="實際尺寸 m" data-en="Actual Size m">實際尺寸 m</span></div>
+      <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl" data-zh="對角線 吋" data-en="Diagonal inch">對角線 吋</span></div>
+      <div class="res-item"><span class="res-val green" id="res-power">-</span><span class="res-lbl" data-zh="平均/最大功耗" data-en="Avg/Max Power">平均/最大功耗</span></div>
+      <div class="res-item"><span class="res-val" id="res-dist">-</span><span class="res-lbl" data-zh="最近觀賞距離" data-en="Min Distance">最近觀賞距離</span></div>
     </div>
   </section>
 </main>
@@ -333,28 +337,26 @@ header {
         <div class="ps-company">盛源 <span>PERSONA</span><br><small style="font-size:10px; color:#888">LED 電視牆 · 專業顯示方案</small></div>
       </div>
       <div class="ps-doc-title">
-        <h2>LED 電視牆 規格配置表</h2>
+        <h2 id="ps-title-print">LED 電視牆 規格配置表</h2>
         <p id="ps-date" style="font-size:11px; margin-top:5px; color:#666">報告日期：-</p>
       </div>
     </div>
     <div class="ps-section">
-      <div class="ps-section-title">產品規格參數</div>
+      <div class="ps-section-title" id="ps-sec-spec">產品規格參數</div>
       <div class="ps-grid">
-        <div class="ps-row"><span class="ps-key">產品系列</span><span class="ps-val" id="ps-series-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">像素間距</span><span class="ps-val" id="ps-pitch-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">模組尺寸</span><span class="ps-val" id="ps-modsize-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">模組解析度</span><span class="ps-val" id="ps-modres-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">像素密度</span><span class="ps-val" id="ps-density-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">最大亮度</span><span class="ps-val" id="ps-bright-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">水平/垂直視角</span><span class="ps-val" id="ps-angle-print">-</span></div>
-        <div class="ps-row"><span class="ps-key">更新率</span><span class="ps-val" id="ps-refresh-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="產品系列" data-en="Series">產品系列</span><span class="ps-val" id="ps-series-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="像素間距" data-en="Pixel Pitch">像素間距</span><span class="ps-val" id="ps-pitch-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="模組尺寸" data-en="Module Size">模組尺寸</span><span class="ps-val" id="ps-modsize-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="模組解析度" data-en="Module Resolution">模組解析度</span><span class="ps-val" id="ps-modres-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="像素密度" data-en="Pixel Density">像素密度</span><span class="ps-val" id="ps-density-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="最大亮度" data-en="Brightness">最大亮度</span><span class="ps-val" id="ps-bright-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="水平/垂直視角" data-en="H/V Angle">水平/垂直視角</span><span class="ps-val" id="ps-angle-print">-</span></div>
+        <div class="ps-row"><span class="ps-key" data-zh="更新率" data-en="Refresh Rate">更新率</span><span class="ps-val" id="ps-refresh-print">-</span></div>
       </div>
     </div>
     <div class="ps-section">
-      <div class="ps-section-title">配置計算結果</div>
-      <div class="ps-results-grid" id="ps-grid-res">
-        <!-- JS 動態填入 -->
-      </div>
+      <div class="ps-section-title" id="ps-sec-res">配置計算結果</div>
+      <div class="ps-results-grid" id="ps-grid-res"></div>
     </div>
     <div class="ps-footer">
       <div>
@@ -362,7 +364,7 @@ header {
         📍 台北總公司：新北市新莊區新北大道二段219號8樓<br>
         ☎ 02-2290-0882 | 💬 LINE：@touchpersona
       </div>
-      <div style="text-align:right">
+      <div style="text-align:right" id="ps-note">
         ※ 本報表數據為系統依配置自動計算產出，僅供規劃參考。<br>
         實際規格請以合約載明為準。
       </div>
@@ -377,7 +379,7 @@ header {
       <input type="text" class="form-input" placeholder="姓名 *">
       <input type="tel" class="form-input" placeholder="電話 *">
       <textarea class="form-input" placeholder="需求說明..." style="height:80px"></textarea>
-      <button class="hdr-btn btn-primary" style="width:100%; justify-content:center" onclick="alert('需求已送出，專員將盡快聯繫您！')">確認送出</button>
+      <button class="hdr-btn btn-primary" style="width:100%; justify-content:center" onclick="alert('需求已送出！')">確認送出</button>
     </div>
   </div>
 </div>
@@ -385,8 +387,9 @@ header {
 <script>
 const DB = {
   indoor_cob: {
-    name: '室內 COB 系列', modW: 150, modH: 168.75, angle: '160° / 160°', refresh: '1920~3840 Hz',
-    info: '💡 COB 技術：晶粒直接封裝於板上，表面平整，抗衝擊、防塵防潮，適合近距離高精細顯示。',
+    name: { zh: '室內 COB 系列', en: 'Indoor COB Series' }, 
+    modW: 150, modH: 168.75, angle: '160° / 160°', refresh: '1920~3840 Hz',
+    info: { zh: '💡 COB 技術：晶粒直接封裝於板上，表面平整，抗衝擊、防塵防潮，適合近距離高精細顯示。', en: '💡 COB Tech: Direct chip bonding, smooth surface, impact & moisture proof, ideal for close-range view.' },
     models: [
       { name: 'P0.62', pitch: 0.62, mW: 240, mH: 270, bright: 600, avg: 157, max: 470, density: 2560000 },
       { name: 'P0.78', pitch: 0.78, mW: 192, mH: 216, bright: 600, avg: 140, max: 420, density: 1638400 },
@@ -397,8 +400,9 @@ const DB = {
     ]
   },
   indoor_smd: {
-    name: '室內 SMD/GOB 系列', modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
-    info: '💡 SMD 技術：色彩鮮豔亮度高。GOB 增加透明保護膠體，提升防護力，適合會議室與展示廳。',
+    name: { zh: '室內 SMD/GOB 系列', en: 'Indoor SMD/GOB Series' }, 
+    modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
+    info: { zh: '💡 SMD 技術：色彩鮮豔亮度高。GOB 增加透明保護膠體，提升防護力。', en: '💡 SMD Tech: High brightness & vivid colors. GOB adds resin protection for durability.' },
     models: [
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, bright: 450, avg: 245, max: 510, density: 640000 },
       { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, bright: 450, avg: 210, max: 470, density: 422500 },
@@ -409,8 +413,9 @@ const DB = {
     ]
   },
   outdoor_smd: {
-    name: '戶外 SMD/GOB 系列', modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
-    info: '💡 戶外高亮度型：亮度 ≥4200 cd/m²，強烈陽光下清晰顯示，IP65 防護，適合廣告牆。',
+    name: { zh: '戶外 SMD/GOB 系列', en: 'Outdoor SMD/GOB Series' }, 
+    modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
+    info: { zh: '💡 戶外高亮度型：亮度 ≥4200 cd/m²，強烈陽光下清晰顯示。', en: '💡 Outdoor High Bright: ≥4200 nits, clear under direct sunlight, IP65 rated.' },
     models: [
       { name: 'P2.5', pitch: 2.5, mW: 128, mH: 64, bright: 4200, avg: 199, max: 597, density: 160000 },
       { name: 'P3',   pitch: 3.0, mW: 104, mH: 52, bright: 4200, avg: 241, max: 724, density: 105625 },
@@ -421,28 +426,18 @@ const DB = {
 };
 
 let state = { 
-  series: 'indoor_cob', 
-  modelIdx: 0, 
-  volt: 110, 
-  bgImg: null, 
-  isBgLoaded: false, 
-  personImg: null, 
-  isPersonLoaded: false 
+  lang: 'zh', series: 'indoor_cob', modelIdx: 0, volt: 110, 
+  bgImg: null, isBgLoaded: false, personImg: null, isPersonLoaded: false 
 };
 
 const canvas = document.getElementById('mainCanvas'), ctx = canvas.getContext('2d');
 let lastCalc = {};
 
-// 預載風景圖（使用星空風景）
 const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
 const defaultBg = new Image();
 defaultBg.crossOrigin = "anonymous";
 defaultBg.src = DEFAULT_BG_URL;
-defaultBg.onload = () => {
-  state.bgImg = defaultBg;
-  state.isBgLoaded = true;
-  update();
-};
+defaultBg.onload = () => { state.bgImg = defaultBg; state.isBgLoaded = true; update(); };
 
 window.onload = () => {
   init(); window.onresize = init;
@@ -469,26 +464,15 @@ function selectSeries(key, btn) {
   const grid = document.getElementById('pitchGrid'); grid.innerHTML = '';
   DB[key].models.forEach((m, i) => {
     const card = document.createElement('div'); card.className = `pitch-card ${i===0?'active':''}`;
-    card.innerHTML = `<div class="pitch-name">${m.name}</div><div class="pitch-meta">${m.pitch}mm 間距<br>≥${m.pitch}m 觀賞</div>`;
+    const pitchLbl = state.lang === 'zh' ? '間距' : 'Pitch';
+    const viewLbl = state.lang === 'zh' ? '觀賞' : 'View';
+    card.innerHTML = `<div class="pitch-name">${m.name}</div><div class="pitch-meta">${m.pitch}mm ${pitchLbl}<br>≥${m.pitch}m ${viewLbl}</div>`;
     card.onclick = () => { 
       document.querySelectorAll('.pitch-card').forEach(c => c.classList.remove('active')); 
-      card.classList.add('active'); 
-      state.modelIdx = i; update(); 
+      card.classList.add('active'); state.modelIdx = i; update(); 
     };
     grid.appendChild(card);
   });
-  update();
-}
-
-function applyRatio(r, btn) {
-  const w = parseFloat(document.getElementById('inW').value);
-  document.getElementById('inH').value = (w / r).toFixed(2);
-  document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-  update();
-}
-
-function setVolt(v, btn) {
-  state.volt = v; document.querySelectorAll('.volt-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
   update();
 }
 
@@ -504,14 +488,14 @@ function update() {
   const wallW = parseFloat(document.getElementById('wallW').value) || 6, wallH = parseFloat(document.getElementById('wallH').value) || 3.5;
 
   document.getElementById('res-modules').innerText = `${nW} × ${nH}`;
-  document.getElementById('res-total').innerText = `${nW * nH} 片`;
+  document.getElementById('res-total').innerText = `${nW * nH} ${state.lang==='zh'?'片':'pcs'}`;
   document.getElementById('res-resolution').innerText = `${resW.toLocaleString()} × ${resH.toLocaleString()}`;
   document.getElementById('res-size').innerText = `${actW.toFixed(2)} × ${actH.toFixed(2)}`;
   document.getElementById('res-diag').innerText = diag + '"';
   document.getElementById('res-power').innerText = `${pAvg}W / ${pMax}W`;
   document.getElementById('res-dist').innerText = `≥ ${m.pitch}m`;
 
-  document.getElementById('sp-series').innerText = s.name;
+  document.getElementById('sp-series').innerText = s.name[state.lang];
   document.getElementById('sp-pitch').innerText = `${m.pitch} mm`;
   document.getElementById('sp-modSize').innerText = `${s.modW} × ${s.modH} mm`;
   document.getElementById('sp-modRes').innerText = `${m.mW} × ${m.mH} px`;
@@ -519,8 +503,9 @@ function update() {
   document.getElementById('sp-bright').innerText = `${m.bright} cd/m²`;
   document.getElementById('sp-angle').innerText = s.angle;
   document.getElementById('sp-pwr').innerText = `${m.avg} / ${m.max} W/m²`;
-  document.getElementById('sp-amp').innerText = `${(pAvg/state.volt).toFixed(1)}A / ${(pMax/state.volt).toFixed(1)}A (${state.volt}V)`;
-  document.getElementById('infoBox').innerText = s.info;
+  const amp = (pMax / state.volt).toFixed(1);
+  document.getElementById('sp-amp').innerText = `${(pAvg/state.volt).toFixed(1)}A / ${amp}A (${state.volt}V)`;
+  document.getElementById('infoBox').innerText = s.info[state.lang];
 
   lastCalc = { s, m, nW, nH, actW, actH, resW, resH, diag, pAvg, pMax, wallW, wallH };
   draw(actW, actH, wallW, wallH, nW, nH, resW, resH, m.name);
@@ -528,13 +513,14 @@ function update() {
 
 function drawDim(x1, y1, x2, y2, txt, color, isVert) {
   ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  const tickSize = 5;
   if (isVert) {
-    ctx.beginPath(); ctx.moveTo(x1-5, y1); ctx.lineTo(x1+5, y1); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(x2-5, y2); ctx.lineTo(x2+5, y2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1-tickSize, y1); ctx.lineTo(x1+tickSize, y1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2-tickSize, y2); ctx.lineTo(x2+tickSize, y2); ctx.stroke();
     ctx.save(); ctx.translate(x1-12, (y1+y2)/2); ctx.rotate(-Math.PI/2); ctx.font = "bold 11px Segoe UI"; ctx.textAlign = "center"; ctx.fillText(txt, 0, 0); ctx.restore();
   } else {
-    ctx.beginPath(); ctx.moveTo(x1, y1-5); ctx.lineTo(x1, y1+5); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(x2, y2-5); ctx.lineTo(x2, y2+5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x1, y1-tickSize); ctx.lineTo(x1, y1+tickSize); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2, y2-tickSize); ctx.lineTo(x2, y2+tickSize); ctx.stroke();
     ctx.font = "bold 11px Segoe UI"; ctx.textAlign = "center"; ctx.fillText(txt, (x1+x2)/2, y1-8);
   }
 }
@@ -545,57 +531,35 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   const margin = 100, scale = Math.min((W - margin*2)/wallW, (H - margin*2)/wallH);
   const dw = wallW * scale, dh = wallH * scale, ox = (W-dw)/2, oy = (H-dh)/2;
 
-  // 牆面
   ctx.fillStyle = '#1a1d26'; ctx.fillRect(ox, oy, dw, dh);
-  drawDim(ox, oy-25, ox+dw, oy-25, `牆壁 ${wallW.toFixed(1)} m`, '#4a9eff', false);
-  drawDim(ox+dw+25, oy, ox+dw+25, oy+dh, `牆壁 ${wallH.toFixed(1)} m`, '#4a9eff', true);
+  const wallLabel = state.lang === 'zh' ? '牆壁' : 'Wall';
+  drawDim(ox, oy-25, ox+dw, oy-25, `${wallLabel} ${wallW.toFixed(1)} m`, '#4a9eff', false);
+  drawDim(ox+dw+25, oy, ox+dw+25, oy+dh, `${wallLabel} ${wallH.toFixed(1)} m`, '#4a9eff', true);
 
-  // 螢幕位置
   const sw = actW * scale, sh = actH * scale, sx = ox+(dw-sw)/2, sy = oy+(dh-sh)/2;
-  
-  // 裁切螢幕範圍
-  ctx.save(); 
-  ctx.beginPath(); 
-  ctx.rect(sx, sy, sw, sh); 
-  ctx.clip();
-  
-  // 螢幕底色
-  ctx.fillStyle = '#000'; 
-  ctx.fillRect(sx, sy, sw, sh);
-  
-  // 繪製背景風景圖（Cover 模式）
+  ctx.save(); ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip();
+  ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh);
   if (state.bgImg && state.isBgLoaded) {
-    const imgAR = state.bgImg.width / state.bgImg.height;
-    const scrAR = sw / sh;
+    const imgAR = state.bgImg.width / state.bgImg.height, scrAR = sw / sh;
     let drawW, drawH;
-    if (imgAR > scrAR) {
-      drawH = sh; drawW = sh * imgAR;
-    } else {
-      drawW = sw; drawH = sw / imgAR;
-    }
+    if (imgAR > scrAR) { drawH = sh; drawW = sh * imgAR; } else { drawW = sw; drawH = sw / imgAR; }
     ctx.drawImage(state.bgImg, sx + (sw - drawW) / 2, sy + (sh - drawH) / 2, drawW, drawH);
-    // 模擬 LED 螢幕的暗角或灰度
-    ctx.fillStyle = "rgba(0,0,0,0.15)";
-    ctx.fillRect(sx, sy, sw, sh);
+    ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(sx, sy, sw, sh);
   }
-  
-  // 模組格線
   ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 0.5;
   for(let i=1; i<nW; i++) { let lx=sx+i*sw/nW; ctx.beginPath(); ctx.moveTo(lx,sy); ctx.lineTo(lx,sy+sh); ctx.stroke(); }
   for(let j=1; j<nH; j++) { let ly=sy+j*sh/nH; ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx+sw,ly); ctx.stroke(); }
   ctx.restore();
 
-  // 螢幕外框與標註
   ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.strokeRect(sx, sy, sw, sh);
   drawDim(sx, sy+sh+25, sx+sw, sy+sh+25, `${actW.toFixed(2)} m`, '#fff', false);
   drawDim(sx-25, sy, sx-25, sy+sh, `${actH.toFixed(2)} m`, '#fff', true);
 
-  // 紅色 Badge (右上角)
   const bw = 65, bh = 22; ctx.fillStyle = '#e3001b';
   if(ctx.roundRect) ctx.roundRect(sx+sw-bw-5, sy+5, bw, bh, 4); else ctx.fillRect(sx+sw-bw-5, sy+5, bw, bh);
-  ctx.fill(); ctx.fillStyle='#fff'; ctx.font="bold 11px Segoe UI"; ctx.textAlign="center"; ctx.fillText(`${nW*nH} 片`, sx+sw-bw/2-5, sy+20);
+  ctx.fill(); ctx.fillStyle='#fff'; ctx.font="bold 11px Segoe UI"; ctx.textAlign="center"; 
+  ctx.fillText(`${nW*nH} ${state.lang==='zh'?'片':'pcs'}`, sx+sw-bw/2-5, sy+20);
 
-  // 中央資訊遮罩與文字
   if(sw > 120) {
     ctx.fillStyle = 'rgba(0,0,0,0.65)';
     const cw = 160, ch = 50;
@@ -603,10 +567,10 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
     ctx.fillStyle='#fff'; ctx.textAlign="center"; ctx.font="bold 16px Segoe UI";
     ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx+sw/2, sy+sh/2);
     ctx.font="11px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
-    ctx.fillText(`${mName} · ${nW}×${nH} 模組`, sx+sw/2, sy+sh/2+17);
+    const modLbl = state.lang === 'zh' ? '模組' : 'Modules';
+    ctx.fillText(`${mName} · ${nW}×${nH} ${modLbl}`, sx+sw/2, sy+sh/2+17);
   }
 
-  // 人物繪製
   if (state.isPersonLoaded) {
     const ph = 1.78 * scale, pw = ph * (state.personImg.width/state.personImg.height);
     ctx.drawImage(state.personImg, sx-95-pw/2, oy+dh-ph, pw, ph);
@@ -615,13 +579,39 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   }
 }
 
-function exportPDF() {
-  const d = lastCalc, now = new Date();
-  if(!d.m) return;
+function changeLang(l, btn) {
+  state.lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-zh]').forEach(el => {
+    el.innerText = el.getAttribute('data-' + l);
+  });
+  // 報表模板標籤
+  document.getElementById('ps-title-print').innerText = l === 'zh' ? 'LED 電視牆 規格配置表' : 'LED Video Wall Specifications';
+  document.getElementById('ps-sec-spec').innerText = l === 'zh' ? '產品規格參數' : 'Product Parameters';
+  document.getElementById('ps-sec-res').innerText = l === 'zh' ? '配置計算結果' : 'Calculation Results';
+  document.getElementById('ps-note').innerText = l === 'zh' ? '※ 本報表數據為系統依配置自動計算產出，僅供規劃參考。實際規格請以合約載明為準。' : '* This report is auto-generated for planning reference only. Actual specs subject to contract.';
   
-  // 填寫列印模板數據
-  document.getElementById('ps-date').innerText = `報告日期：${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`;
-  document.getElementById('ps-series-print').innerText = d.s.name;
+  selectSeries(state.series, document.querySelector(`[data-series="${state.series}"]`));
+}
+
+function applyRatio(r, btn) {
+  const w = parseFloat(document.getElementById('inW').value);
+  document.getElementById('inH').value = (w / r).toFixed(2);
+  document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+  update();
+}
+
+function setVolt(v, btn) {
+  state.volt = v; document.querySelectorAll('.volt-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+  update();
+}
+
+function exportPDF() {
+  const d = lastCalc, now = new Date(); if(!d.m) return;
+  const l = state.lang;
+  document.getElementById('ps-date').innerText = (l === 'zh' ? '報告日期：' : 'Report Date: ') + `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`;
+  document.getElementById('ps-series-print').innerText = d.s.name[l];
   document.getElementById('ps-pitch-print').innerText = `${d.m.pitch} mm`;
   document.getElementById('ps-modsize-print').innerText = `${d.s.modW} × ${d.s.modH} mm`;
   document.getElementById('ps-modres-print').innerText = `${d.m.mW} × ${d.m.mH} px`;
@@ -630,32 +620,22 @@ function exportPDF() {
   document.getElementById('ps-angle-print').innerText = d.s.angle;
   document.getElementById('ps-refresh-print').innerText = d.s.refresh;
   
-  const resGrid = document.getElementById('ps-grid-res'); 
-  resGrid.innerHTML = `
-    <div class="ps-res-card accent"><div class="ps-rv">${d.nW} × ${d.nH}</div><div class="ps-rl">模組配置 W×H</div></div>
-    <div class="ps-res-card accent"><div class="ps-rv">${d.nW*d.nH} 片</div><div class="ps-rl">模組總數</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()}×${d.resH.toLocaleString()}</div><div class="ps-rl">解析度 (PX)</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.diag}"</div><div class="ps-rl">對角線 (吋)</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)}×${d.actH.toFixed(2)} m</div><div class="ps-rl">實際尺寸 (M)</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.pAvg} W</div><div class="ps-rl">平均功耗</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.pMax} W</div><div class="ps-rl">最大功耗</div></div>
-    <div class="ps-res-card"><div class="ps-rv">≥ ${d.m.pitch} m</div><div class="ps-rl">最近觀賞距離</div></div>
+  const unit = l === 'zh' ? '片' : 'pcs';
+  const grid = document.getElementById('ps-grid-res'); 
+  grid.innerHTML = `
+    <div class="ps-res-card accent"><div class="ps-rv">${d.nW} × ${d.nH}</div><div class="ps-rl">${l==='zh'?'模組配置':'Modules WxH'}</div></div>
+    <div class="ps-res-card accent"><div class="ps-rv">${d.nW*d.nH} ${unit}</div><div class="ps-rl">${l==='zh'?'模組總數':'Total Modules'}</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()}×${d.resH.toLocaleString()}</div><div class="ps-rl">${l==='zh'?'畫面解析度':'Resolution'} (PX)</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.diag}"</div><div class="ps-rl">${l==='zh'?'對角線':'Diagonal'}</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)}×${d.actH.toFixed(2)} m</div><div class="ps-rl">${l==='zh'?'實際尺寸':'Actual Size'} (M)</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.pAvg} W</div><div class="ps-rl">${l==='zh'?'平均功耗':'Avg Power'}</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.pMax} W</div><div class="ps-rl">${l==='zh'?'最大功耗':'Max Power'}</div></div>
+    <div class="ps-res-card"><div class="ps-rv">≥ ${d.m.pitch} m</div><div class="ps-rl">${l==='zh'?'最近觀賞距離':'Viewing Dist'}</div></div>
   `;
-  
   window.print();
 }
 
-function loadBg(input) { 
-  if (input.files && input.files[0]) { 
-    const r = new FileReader(); 
-    r.onload = (e) => { 
-      const img = new Image(); 
-      img.onload = () => { state.bgImg = img; state.isBgLoaded = true; update(); }; 
-      img.src = e.target.result; 
-    }; 
-    r.readAsDataURL(input.files[0]); 
-  } 
-}
+function loadBg(input) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { const img = new Image(); img.onload = () => { state.bgImg = img; state.isBgLoaded = true; update(); }; img.src = e.target.result; }; r.readAsDataURL(input.files[0]); } }
 function openContact() { document.getElementById('contactModal').classList.add('open'); }
 function closeContact() { document.getElementById('contactModal').classList.remove('open'); }
 </script>
