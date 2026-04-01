@@ -35,122 +35,123 @@ html, body {
 header {
   background: linear-gradient(90deg, #0f0008 0%, #0b0d12 50%, #000a18 100%);
   border-bottom: 1px solid var(--border);
-  padding: 0 22px; height: 58px;
+  padding: 0 22px; height: 60px;
   display: flex; align-items: center; justify-content: space-between;
   flex-shrink: 0; position: relative; z-index: 100;
 }
 .logo { display: flex; align-items: center; gap: 12px; height: 100%; }
-.logo-img { height: 36px; width: auto; display: block; object-fit: contain; }
+.logo-img { height: 38px; width: auto; display: block; object-fit: contain; }
 
-.header-actions { display: flex; align-items: center; gap: 8px; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
 .hdr-btn {
-  padding: 7px 14px; border-radius: 7px; cursor: pointer;
-  font-size: 12px; font-weight: 600; border: none;
-  display: flex; align-items: center; gap: 5px; transition: all 0.18s;
+  padding: 8px 16px; border-radius: 8px; cursor: pointer;
+  font-size: 13px; font-weight: 600; border: none;
+  display: flex; align-items: center; gap: 6px; transition: all 0.18s;
   white-space: nowrap;
 }
-.hdr-btn:hover { filter: brightness(1.12); transform: translateY(-1px); }
+.hdr-btn:hover { filter: brightness(1.15); transform: translateY(-1px); }
 .btn-line { background: var(--line-green); color: #fff; }
-.btn-pdf { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid var(--border); }
+.btn-pdf { background: #1c2231; color: var(--text); border: 1px solid var(--border); }
 .btn-contact { background: var(--accent); color: #fff; }
 
 .lang-toggle {
   display: flex; background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-  border-radius: 7px; overflow: hidden; margin-right: 4px;
+  border-radius: 8px; overflow: hidden;
 }
 .lang-btn {
   padding: 6px 12px; border: none; background: transparent;
   color: var(--muted); font-size: 12px; font-weight: 700;
-  cursor: pointer; transition: all 0.18s;
+  cursor: pointer;
 }
 .lang-btn.active { background: var(--accent); color: #fff; }
 
 /* ─── LAYOUT ─────────────────────────────────────────────────── */
-.app { display: flex; height: calc(100vh - 58px); }
+.app { display: flex; height: calc(100vh - 60px); }
 
 /* ─── LEFT PANEL ─────────────────────────────────────────────── */
 .left-panel {
-  width: 318px; flex-shrink: 0;
+  width: 320px; flex-shrink: 0;
   background: var(--panel); border-right: 1px solid var(--border);
   display: flex; flex-direction: column; overflow: hidden;
 }
-.left-scroll { flex: 1; overflow-y: auto; padding: 18px; }
-.left-scroll::-webkit-scrollbar { width: 3px; }
-.left-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.left-scroll { flex: 1; overflow-y: auto; padding: 20px; }
+.left-scroll::-webkit-scrollbar { width: 4px; }
+.left-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
 .section-title {
   font-size: 11px; font-weight: 700; color: #a0adc4;
-  text-transform: uppercase; letter-spacing: 1.4px; margin-bottom: 10px;
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;
 }
 
-/* Series Tabs (同步圖片) */
+/* Series Tabs */
 .series-tabs {
   display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 5px; margin-bottom: 20px;
+  gap: 6px; margin-bottom: 22px;
   background: rgba(0,0,0,0.25); border-radius: 10px;
   padding: 4px; border: 1px solid var(--border);
 }
 .series-btn {
-  padding: 8px 4px; border: none; background: transparent;
+  padding: 10px 4px; border: none; background: transparent;
   color: #8a96b0; border-radius: 7px; cursor: pointer;
-  font-size: 11px; font-weight: 600; text-align: center; transition: all 0.18s;
+  font-size: 11px; font-weight: 600; text-align: center; transition: all 0.2s;
 }
 .series-btn.active { background: var(--accent); color: #fff; }
-.dot { display: block; width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 4px; border: 1.5px solid rgba(255,255,255,0.2); }
+.series-btn .dot { display: block; width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 5px; border: 1.5px solid rgba(255,255,255,0.2); }
 
 /* Pitch Grid */
-.pitch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 20px; }
+.pitch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
 .pitch-card {
-  border: 1.5px solid var(--border); border-radius: 10px;
-  padding: 10px 6px; text-align: center; cursor: pointer;
-  background: rgba(0,0,0,0.2); transition: all 0.18s;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 12px 6px; text-align: center; cursor: pointer;
+  background: rgba(0,0,0,0.2); transition: all 0.2s;
 }
 .pitch-card.active { border-color: var(--accent); background: var(--accent-dim); }
-.pitch-name { font-size: 15px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.pitch-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
 .pitch-card.active .pitch-name { color: #ff5566; }
 .pitch-meta { font-size: 9px; color: var(--muted); line-height: 1.5; }
 
 /* Input Fields */
-.size-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 11px; }
-.field-label { font-size: 11px; color: #a0adc4; font-weight: 600; margin-bottom: 5px; display: block; }
+.field-group { margin-bottom: 15px; }
+.field-label { font-size: 12px; color: #a0adc4; font-weight: 600; margin-bottom: 6px; display: block; }
 .field-input {
   display: flex; align-items: center; background: rgba(0,0,0,0.3);
-  border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden;
+  border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden;
 }
 .field-input input {
   flex: 1; background: transparent; border: none; outline: none;
-  color: #fff; padding: 10px 11px; font-size: 18px; font-weight: 700; width: 100%;
+  color: #fff; padding: 12px; font-size: 18px; font-weight: 700; width: 100%;
 }
 .field-unit {
-  padding: 0 9px; font-size: 11px; color: var(--muted);
-  border-left: 1px solid var(--border); background: rgba(255,255,255,0.02); height: 100%; display: flex; align-items: center;
+  padding: 0 12px; font-size: 12px; color: var(--muted);
+  border-left: 1px solid var(--border); background: rgba(255,255,255,0.03); height: 100%; display: flex; align-items: center;
 }
 
-.ratio-row { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+.ratio-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; margin-bottom: 22px; align-items: center; }
 .ratio-btn {
-  padding: 4px 9px; border: 1px solid var(--border); border-radius: 5px;
-  background: transparent; color: #8a96b0; font-size: 11px; cursor: pointer;
+  padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px;
+  background: transparent; color: #8a96b0; font-size: 11px; cursor: pointer; transition: 0.2s;
 }
+.ratio-btn:hover { border-color: var(--muted); color: #fff; }
 .ratio-btn.active { border-color: var(--accent); background: var(--accent-dim); color: #fff; }
 
 /* Voltage Toggle */
-.volt-row { display: flex; gap: 7px; margin-bottom: 18px; }
+.volt-row { display: flex; gap: 8px; margin-bottom: 22px; }
 .volt-btn {
   flex: 1; padding: 10px; border: 1.5px solid var(--border);
-  border-radius: 8px; background: transparent; color: #8a96b0;
+  border-radius: 10px; background: transparent; color: #8a96b0;
   font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
 }
 .volt-btn.active { border-color: var(--yellow); background: rgba(245,200,66,0.1); color: var(--yellow); }
 
 /* Spec Table */
-.spec-mini { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 14px; }
-.spec-mini td { padding: 8px 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.spec-mini { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
+.spec-mini td { padding: 9px 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .spec-mini td:first-child { color: var(--muted); }
 .spec-mini td:last-child { color: #fff; text-align: right; font-weight: 700; }
 
 .info-box {
-  background: rgba(74,158,255,0.07); border: 1px solid rgba(74,158,255,0.25);
-  border-radius: 8px; padding: 12px; font-size: 11.5px; color: #a8ccf5; line-height: 1.6;
+  background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.25);
+  border-radius: 10px; padding: 14px; font-size: 11.5px; color: #a8ccf5; line-height: 1.6;
 }
 
 /* ─── RIGHT PANEL ────────────────────────────────────────────── */
@@ -158,82 +159,75 @@ header {
 .canvas-wrap { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 #mainCanvas { display: block; }
 
-.upload-btn-wrap { position: absolute; top: 15px; right: 15px; }
+.upload-btn-wrap { position: absolute; top: 20px; right: 20px; z-index: 10; }
 .upload-btn {
-  padding: 7px 14px; border-radius: 8px; background: rgba(20,24,36,0.85);
-  border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 11px; cursor: pointer; backdrop-filter: blur(5px);
+  padding: 8px 16px; border-radius: 10px; background: rgba(20,24,36,0.85);
+  border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 12px; cursor: pointer; backdrop-filter: blur(10px);
 }
 
-.results-bar { background: var(--panel); border-top: 1px solid var(--border); padding: 14px 20px; display: grid; grid-template-columns: repeat(7, 1fr); }
-.res-item { text-align: center; border-right: 1px solid var(--border); padding: 0 5px; }
+.results-bar { background: var(--panel); border-top: 1px solid var(--border); padding: 18px 24px; display: grid; grid-template-columns: repeat(7, 1fr); }
+.res-item { text-align: center; border-right: 1px solid var(--border); padding: 0 8px; }
 .res-item:last-child { border-right: none; }
-.res-val { font-size: 17px; font-weight: 900; color: #fff; margin-bottom: 3px; display: block; }
-.res-val.red { color: var(--accent); }
+.res-val { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 4px; display: block; }
+.res-val.red { color: #ff3b30; }
 .res-val.blue { color: var(--blue); }
 .res-val.yellow { color: var(--yellow); }
 .res-val.green { color: var(--green); }
-.res-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
+.res-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
 
 /* ─── PRINT SHEET ──────────────────────────────────────────── */
 .print-sheet { display: none; }
 @media print {
+  @page { size: auto; margin: 0; }
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   header, .app, .modal-overlay { display: none !important; }
-  .print-sheet { display: block !important; }
-  .ps-page { padding: 30px; max-width: 850px; margin: 0 auto; color: #111; font-family: sans-serif; }
-  .ps-header { display: flex; justify-content: space-between; border-bottom: 3px solid #e3001b; padding-bottom: 15px; margin-bottom: 25px; }
-  .ps-logo-area { display: flex; align-items: center; gap: 12px; }
-  .ps-company { font-size: 20px; font-weight: 800; }
+  .print-sheet { display: block !important; background: #fff !important; }
+  body { background: #fff !important; color: #111 !important; overflow: visible !important; }
+  .ps-page { padding: 40px; max-width: 850px; margin: 0 auto; font-family: 'Segoe UI', sans-serif; }
+  .ps-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #e3001b; padding-bottom: 20px; margin-bottom: 30px; }
+  .ps-logo-area { display: flex; align-items: center; gap: 15px; }
+  .ps-company { font-size: 22px; font-weight: 800; line-height: 1.2; }
   .ps-company span { color: #e3001b; }
-  .ps-section-title { font-size: 12px; font-weight: 700; color: #888; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; text-transform: uppercase; }
-  .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
-  .ps-row { display: flex; justify-content: space-between; background: #f7f7f7; padding: 8px 12px; border-radius: 4px; font-size: 13px; }
-  .ps-val { font-weight: 700; }
-  .ps-results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .ps-res-card { background: #f4f4f4; border: 1px solid #ddd; border-radius: 8px; padding: 12px; text-align: center; }
+  .ps-doc-title { text-align: right; }
+  .ps-doc-title h2 { font-size: 20px; margin: 0; color: #111; }
+  .ps-section-title { font-size: 13px; font-weight: 700; color: #666; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 12px; text-transform: uppercase; margin-top: 25px; }
+  .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ps-row { display: flex; justify-content: space-between; background: #f8f9fa; padding: 10px 15px; border-radius: 6px; font-size: 14px; }
+  .ps-val { font-weight: 700; color: #000; }
+  .ps-results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .ps-res-card { background: #f4f4f4; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; text-align: center; }
   .ps-res-card.accent { background: #fff0f1; border-color: #ffd0d3; }
-  .ps-rv { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+  .ps-rv { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
   .ps-res-card.accent .ps-rv { color: #e3001b; }
-  .ps-rl { font-size: 9px; color: #888; font-weight: 700; }
+  .ps-rl { font-size: 10px; color: #777; font-weight: 700; text-transform: uppercase; }
+  .ps-footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 25px; font-size: 12px; color: #666; display: flex; justify-content: space-between; align-items: flex-start; }
 }
-
-/* ─── MODAL ─────────────────────────────────────────────────── */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(6px); z-index: 1000; display: none;
-  align-items: center; justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal-content {
-  background: #1c2231; border: 1px solid var(--border);
-  border-radius: 16px; width: 450px; max-width: 95vw; overflow: hidden;
-}
-.modal-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
-.modal-body { padding: 20px; }
-.form-input { width: 100%; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; padding: 10px; margin-bottom: 10px; }
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <img src="logo.png" alt="PERSONA" class="logo-img" onerror="this.style.display='none';">
+    <img src="logo.png" alt="PERSONA" class="logo-img" onerror="this.src='https://placehold.co/150x40/0b0d12/e3001b?text=PERSONA';">
     <div class="logo-text" style="line-height:1.2">
-      <div style="font-size:14px; font-weight:800">盛源 <em>PERSONA</em></div>
-      <div style="font-size:10px; color:var(--muted)">LED 電視牆 · 專業顯示方案</div>
+      <div style="font-size:15px; font-weight:800; letter-spacing:0.5px">盛源 <em>PERSONA</em></div>
+      <div style="font-size:10px; color:var(--muted); letter-spacing:0.5px">LED 電視牆 · 專業顯示方案</div>
     </div>
   </div>
 
   <div class="header-actions">
     <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('zh', this)">中文</button>
-      <button class="lang-btn" onclick="setLang('en', this)">EN</button>
+      <button class="lang-btn active">中文</button>
+      <button class="lang-btn">EN</button>
     </div>
     <button class="hdr-btn btn-line" onclick="window.open('https://line.me/R/ti/p/@touchpersona', '_blank')">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.89c.50 0 .907.41.907.91s-.407.91-.907.91H17.59v1.077h1.775c.50 0 .907.41.907.91s-.407.91-.907.91H16.68a.908.908 0 0 1-.907-.91V9.89c0-.50.407-.91.907-.91h2.685zm-5.07 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91s-.907-.41-.907-.91V9.89c0-.5.407-.91.907-.91zm-2.235 0c.5 0 .907.41.907.91v2.43l-1.866-2.924a.91.91 0 0 0-.769-.416.908.908 0 0 0-.907.91v3.808c0 .5.407.91.907.91s.907-.41.907-.91v-2.43l1.866 2.924c.17.267.463.416.769.416.5 0 .907-.41.907-.91V9.89c0-.5-.407-.91-.907-.91zm-4.16 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91H5.214a.908.908 0 0 1-.907-.91V9.89c0-.5.407-.91.907-.91H7.9zM12 2C6.477 2 2 6.145 2 11.25c0 4.537 3.646 8.346 8.57 9.098.334.072.786.22.9.505.103.259.067.665.033.927l-.147.868c-.045.258-.207 1.01.885.55 1.092-.458 5.89-3.465 8.036-5.931C21.456 15.43 22 13.41 22 11.25 22 6.145 17.523 2 12 2z"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.89c.50 0 .907.41.907.91s-.407.91-.907.91H17.59v1.077h1.775c.50 0 .907.41.907.91s-.407.91-.907.91H16.68a.908.908 0 0 1-.907-.91V9.89c0-.50.407-.91.907-.91h2.685zm-5.07 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91s-.907-.41-.907-.91V9.89c0-.5.407-.91.907-.91zm-2.235 0c.5 0 .907.41.907.91v2.43l-1.866-2.924a.91.91 0 0 0-.769-.416.908.908 0 0 0-.907.91v3.808c0 .5.407.91.907.91s.907-.41.907-.91v-2.43l1.866 2.924c.17.267.463.416.769.416.5 0 .907-.41.907-.91V9.89c0-.5-.407-.91-.907-.91zm-4.16 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91H5.214a.908.908 0 0 1-.907-.91V9.89c0-.5.407-.91.907-.91H7.9zM12 2C6.477 2 2 6.145 2 11.25c0 4.537 3.646 8.346 8.57 9.098.334.072.786.22.9.505.103.259.067.665.033.927l-.147.868c-.045.258-.207 1.01.885.55 1.092-.458 5.89-3.465 8.036-5.931C21.456 15.43 22 13.41 22 11.25 22 6.145 17.523 2 12 2z"/></svg>
       <span>LINE 洽詢</span>
     </button>
-    <button class="hdr-btn btn-pdf" onclick="exportPDF()">📄 匯出規格書</button>
+    <button class="hdr-btn btn-pdf" id="btnExport" onclick="exportPDF()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/></svg>
+      <span>匯出規格書</span>
+    </button>
     <button class="hdr-btn btn-contact" onclick="openContact()">✉ 聯繫我們</button>
   </div>
 </header>
@@ -255,23 +249,21 @@ header {
       </div>
 
       <div class="section-title">像素間距 選擇</div>
-      <div class="pitch-grid" id="pitchGrid"></div>
+      <div id="pitchGrid" class="pitch-grid"></div>
 
       <div class="section-title">螢幕需求尺寸</div>
-      <div class="size-row">
-        <div>
-          <label class="field-label">寬度 Width</label>
-          <div class="field-input">
-            <input type="number" id="inW" value="3.0" step="0.1" oninput="update()">
-            <div class="field-unit">m</div>
-          </div>
+      <div class="field-group">
+        <label class="field-label">寬度 Width</label>
+        <div class="field-input">
+          <input type="number" id="inW" value="3.0" step="0.1" oninput="update()">
+          <div class="field-unit">m</div>
         </div>
-        <div>
-          <label class="field-label">高度 Height</label>
-          <div class="field-input">
-            <input type="number" id="inH" value="2.0" step="0.1" oninput="update()">
-            <div class="field-unit">m</div>
-          </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">高度 Height</label>
+        <div class="field-input">
+          <input type="number" id="inH" value="2.0" step="0.1" oninput="update()">
+          <div class="field-unit">m</div>
         </div>
       </div>
       <div class="ratio-row">
@@ -284,7 +276,7 @@ header {
       </div>
 
       <div class="section-title">📐 場域牆壁實際尺寸</div>
-      <div class="size-row">
+      <div class="field-group" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
         <div class="field-input"><input type="number" id="wallW" value="6.0" oninput="update()"><div class="field-unit">m</div></div>
         <div class="field-input"><input type="number" id="wallH" value="3.5" oninput="update()"><div class="field-unit">m</div></div>
       </div>
@@ -303,12 +295,12 @@ header {
         <tr><td>模組解析度</td><td id="sp-modRes">-</td></tr>
         <tr><td>像素密度</td><td id="sp-density">-</td></tr>
         <tr><td>亮度</td><td id="sp-bright">-</td></tr>
-        <tr><td>水平/垂直視角</td><td id="sp-angle">-</td></tr>
-        <tr><td>平均/最大功耗</td><td id="sp-pwr">-</td></tr>
+        <tr><td>視角</td><td id="sp-angle">-</td></tr>
+        <tr><td>功耗 (Avg/Max)</td><td id="sp-pwr">-</td></tr>
         <tr><td>最大電流需求</td><td id="sp-amp" style="color:var(--yellow)">-</td></tr>
       </table>
 
-      <div class="info-box" id="infoBox">💡 COB 技術：晶粒直接封裝於板上，表面平整，抗衝擊防塵防潮。</div>
+      <div class="info-box" id="infoBox"></div>
     </div>
   </aside>
 
@@ -327,25 +319,55 @@ header {
       <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl">畫面解析度 px</span></div>
       <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl">實際尺寸 m</span></div>
       <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl">對角線 吋</span></div>
-      <div class="res-item"><span class="res-val green" id="res-power">-</span><span class="res-lbl">平均/最大功耗</span></div>
+      <div class="res-item"><span class="res-val green" id="res-power">-</span><span class="res-lbl">估算功耗 (Avg/Max)</span></div>
       <div class="res-item"><span class="res-val" id="res-dist">-</span><span class="res-lbl">最近觀賞距離</span></div>
     </div>
   </section>
 </main>
 
-<!-- 列印模板 -->
+<!-- 列印規格書模板 -->
 <div class="print-sheet" id="printSheet">
   <div class="ps-page">
     <div class="ps-header">
       <div class="ps-logo-area">
-        <img src="logo.png" style="height:45px" alt="Logo">
+        <img src="logo.png" style="height:50px" alt="PERSONA" onerror="this.src='https://placehold.co/150x40/0b0d12/e3001b?text=PERSONA';">
         <div class="ps-company">盛源 <span>PERSONA</span><br><small style="font-size:10px; color:#888">LED 電視牆 · 專業顯示方案</small></div>
       </div>
-      <div class="ps-doc-title"><h2>LED 電視牆 規格配置表</h2><p id="ps-date">-</p></div>
+      <div class="ps-doc-title">
+        <h2>LED 電視牆 規格配置表</h2>
+        <p id="ps-date" style="font-size:11px; margin-top:5px; color:#666">報告日期：-</p>
+      </div>
     </div>
-    <div class="ps-section"><div class="ps-section-title">產品規格</div><div class="ps-grid" id="ps-grid-spec"></div></div>
-    <div class="ps-section"><div class="ps-section-title">配置計算結果</div><div class="ps-results-grid" id="ps-grid-res"></div></div>
-    <div class="ps-footer"><div>盛源精密工業股份有限公司 PERSONA<br>☎ 02-2290-0882 | 💬 LINE：@touchpersona</div><div style="text-align:right">本報表由系統自動產生，僅供參考。</div></div>
+    <div class="ps-section">
+      <div class="ps-section-title">產品規格參數</div>
+      <div class="ps-grid" id="ps-grid-spec">
+        <div class="ps-row"><span class="ps-key">產品系列</span><span class="ps-val" id="ps-series">-</span></div>
+        <div class="ps-row"><span class="ps-key">像素間距</span><span class="ps-val" id="ps-pitch">-</span></div>
+        <div class="ps-row"><span class="ps-key">模組尺寸</span><span class="ps-val" id="ps-modsize">-</span></div>
+        <div class="ps-row"><span class="ps-key">模組解析度</span><span class="ps-val" id="ps-modres">-</span></div>
+        <div class="ps-row"><span class="ps-key">像素密度</span><span class="ps-val" id="ps-density">-</span></div>
+        <div class="ps-row"><span class="ps-key">最大亮度</span><span class="ps-val" id="ps-bright">-</span></div>
+        <div class="ps-row"><span class="ps-key">水平/垂直視角</span><span class="ps-val" id="ps-angle">-</span></div>
+        <div class="ps-row"><span class="ps-key">更新率</span><span class="ps-val" id="ps-refresh">-</span></div>
+      </div>
+    </div>
+    <div class="ps-section">
+      <div class="ps-section-title">配置計算結果</div>
+      <div class="ps-results-grid" id="ps-grid-res">
+        <!-- JS 動態填入 -->
+      </div>
+    </div>
+    <div class="ps-footer">
+      <div>
+        <strong>盛源精密工業股份有限公司 PERSONA</strong><br>
+        📍 台北總公司：新北市新莊區新北大道二段219號8樓<br>
+        ☎ 02-2290-0882 | 💬 LINE：@touchpersona
+      </div>
+      <div style="text-align:right">
+        ※ 本報表數據為系統依配置自動計算產出，僅供規劃參考。<br>
+        實際規格請以合約載明為準。
+      </div>
+    </div>
   </div>
 </div>
 
@@ -356,7 +378,7 @@ header {
       <input type="text" class="form-input" placeholder="姓名 *">
       <input type="tel" class="form-input" placeholder="電話 *">
       <textarea class="form-input" placeholder="需求說明..." style="height:80px"></textarea>
-      <button class="hdr-btn btn-primary" style="width:100%; justify-content:center" onclick="alert('已收到您的需求！')">確認送出</button>
+      <button class="hdr-btn btn-primary" style="width:100%; justify-content:center" onclick="alert('需求已送出，專員將盡快聯繫您！')">確認送出</button>
     </div>
   </div>
 </div>
@@ -377,7 +399,7 @@ const DB = {
   },
   indoor_smd: {
     name: '室內 SMD/GOB 系列', modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
-    info: '💡 SMD 技術：三色晶粒獨立，色彩鮮豔亮度高。GOB 增加透明保護膠體，提升防護力。',
+    info: '💡 SMD 技術：色彩鮮豔亮度高。GOB 增加透明保護膠體，提升防護力，適合會議室與展示廳。',
     models: [
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, bright: 450, avg: 245, max: 510, density: 640000 },
       { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, bright: 450, avg: 210, max: 470, density: 422500 },
@@ -389,7 +411,7 @@ const DB = {
   },
   outdoor_smd: {
     name: '戶外 SMD/GOB 系列', modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
-    info: '💡 戶外高亮度型：亮度 ≥4200 cd/m²，強烈陽光下清晰顯示，IP65 防護。',
+    info: '💡 戶外高亮度型：亮度 ≥4200 cd/m²，強烈陽光下清晰顯示，IP65 防護，適合廣告牆。',
     models: [
       { name: 'P2.5', pitch: 2.5, mW: 128, mH: 64, bright: 4200, avg: 199, max: 597, density: 160000 },
       { name: 'P3',   pitch: 3.0, mW: 104, mH: 52, bright: 4200, avg: 241, max: 724, density: 105625 },
@@ -402,6 +424,13 @@ const DB = {
 let state = { series: 'indoor_cob', modelIdx: 0, volt: 110, bgImg: null, isBgLoaded: false, personImg: null, isPersonLoaded: false };
 const canvas = document.getElementById('mainCanvas'), ctx = canvas.getContext('2d');
 let lastCalc = {};
+
+// 預載星空背景圖
+const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1506318137071-a8e063b4bcc0?q=80&w=1280&auto=format&fit=crop";
+const defaultBg = new Image();
+defaultBg.crossOrigin = "anonymous";
+defaultBg.src = DEFAULT_BG_URL;
+defaultBg.onload = () => { if(!state.isBgLoaded) { state.bgImg = defaultBg; update(); } };
 
 window.onload = () => {
   init(); window.onresize = init;
@@ -418,6 +447,7 @@ function init() {
 function loadPerson() {
   const img = new Image(); img.src = "LED計算人物圖.png";
   img.onload = () => { state.personImg = img; state.isPersonLoaded = true; update(); };
+  img.onerror = () => { state.isPersonLoaded = false; };
 }
 
 function selectSeries(key, btn) {
@@ -428,7 +458,11 @@ function selectSeries(key, btn) {
   DB[key].models.forEach((m, i) => {
     const card = document.createElement('div'); card.className = `pitch-card ${i===0?'active':''}`;
     card.innerHTML = `<div class="pitch-name">${m.name}</div><div class="pitch-meta">${m.pitch}mm 間距<br>≥${m.pitch}m 觀賞</div>`;
-    card.onclick = () => { document.querySelectorAll('.pitch-card').forEach(c => c.classList.remove('active')); card.classList.add('active'); state.modelIdx = i; update(); };
+    card.onclick = () => { 
+      document.querySelectorAll('.pitch-card').forEach(c => c.classList.remove('active')); 
+      card.classList.add('active'); 
+      state.modelIdx = i; update(); 
+    };
     grid.appendChild(card);
   });
   update();
@@ -456,7 +490,6 @@ function update() {
   const pAvg = Math.round(area * m.avg), pMax = Math.round(area * m.max);
   const wallW = parseFloat(document.getElementById('wallW').value) || 6, wallH = parseFloat(document.getElementById('wallH').value) || 3.5;
 
-  // UI 更新
   document.getElementById('res-modules').innerText = `${nW} × ${nH}`;
   document.getElementById('res-total').innerText = `${nW * nH} 片`;
   document.getElementById('res-resolution').innerText = `${resW.toLocaleString()} × ${resH.toLocaleString()}`;
@@ -473,8 +506,7 @@ function update() {
   document.getElementById('sp-bright').innerText = `${m.bright} cd/m²`;
   document.getElementById('sp-angle').innerText = s.angle;
   document.getElementById('sp-pwr').innerText = `${m.avg} / ${m.max} W/m²`;
-  const amp = (pMax / state.volt).toFixed(1);
-  document.getElementById('sp-amp').innerText = `${(pAvg/state.volt).toFixed(1)}A / ${amp}A (${state.volt}V)`;
+  document.getElementById('sp-amp').innerText = `${(pAvg/state.volt).toFixed(1)}A / ${(pMax/state.volt).toFixed(1)}A (${state.volt}V)`;
   document.getElementById('infoBox').innerText = s.info;
 
   lastCalc = { s, m, nW, nH, actW, actH, resW, resH, diag, pAvg, pMax, wallW, wallH };
@@ -497,7 +529,7 @@ function drawDim(x1, y1, x2, y2, txt, color, isVert) {
 function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   const W = canvas.width, H = canvas.height; ctx.clearRect(0,0,W,H);
   ctx.fillStyle = '#0a0d14'; ctx.fillRect(0,0,W,H);
-  const margin = 80, scale = Math.min((W - margin*2)/wallW, (H - margin*2)/wallH);
+  const margin = 100, scale = Math.min((W - margin*2)/wallW, (H - margin*2)/wallH);
   const dw = wallW * scale, dh = wallH * scale, ox = (W-dw)/2, oy = (H-dh)/2;
 
   // 牆面
@@ -509,7 +541,13 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   const sw = actW * scale, sh = actH * scale, sx = ox+(dw-sw)/2, sy = oy+(dh-sh)/2;
   ctx.save(); ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip();
   ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh);
-  if (state.isBgLoaded) ctx.drawImage(state.bgImg, sx, sy, sw, sh);
+  if (state.bgImg) {
+    const imgAR = state.bgImg.width / state.bgImg.height, scrAR = sw/sh;
+    let iw, ih;
+    if (imgAR > scrAR) { ih = sh; iw = ih * imgAR; } else { iw = sw; ih = iw / imgAR; }
+    ctx.drawImage(state.bgImg, sx + (sw-iw)/2, sy + (sh-ih)/2, iw, ih);
+    ctx.fillStyle = "rgba(0,0,0,0.2)"; ctx.fillRect(sx,sy,sw,sh);
+  }
   ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth = 0.5;
   for(let i=1;i<nW;i++) { let lx=sx+i*sw/nW; ctx.beginPath(); ctx.moveTo(lx,sy); ctx.lineTo(lx,sy+sh); ctx.stroke(); }
   for(let j=1;j<nH;j++) { let ly=sy+j*sh/nH; ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx+sw,ly); ctx.stroke(); }
@@ -519,43 +557,43 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   drawDim(sx, sy+sh+25, sx+sw, sy+sh+25, `${actW.toFixed(2)} m`, '#fff', false);
   drawDim(sx-25, sy, sx-25, sy+sh, `${actH.toFixed(2)} m`, '#fff', true);
 
-  // Badge (240 片)
-  const bw = 65, bh = 22; ctx.fillStyle = '#ff0022';
+  // Badge
+  const bw = 65, bh = 22; ctx.fillStyle = '#e3001b';
   if(ctx.roundRect) ctx.roundRect(sx+sw-bw-5, sy+5, bw, bh, 4); else ctx.fillRect(sx+sw-bw-5, sy+5, bw, bh);
-  ctx.fill(); ctx.fillStyle='#fff'; ctx.font="bold 11px Inter"; ctx.textAlign="center"; ctx.fillText(`${nW*nH} 片`, sx+sw-bw/2-5, sy+20);
+  ctx.fill(); ctx.fillStyle='#fff'; ctx.font="bold 11px Segoe UI"; ctx.textAlign="center"; ctx.fillText(`${nW*nH} 片`, sx+sw-bw/2-5, sy+20);
 
   // Center Info
-  if(sw > 100) {
-    ctx.fillStyle = 'rgba(0,0,0,0.65)'; ctx.fillRect(sx+sw/2-75, sy+sh/2-25, 150, 50);
-    ctx.fillStyle='#fff'; ctx.textAlign="center"; ctx.font="bold 15px Inter"; ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx+sw/2, sy+sh/2);
-    ctx.font="10px Inter"; ctx.fillStyle="rgba(255,255,255,0.7)"; ctx.fillText(`${mName} · ${nW}×${nH} 模組`, sx+sw/2, sy+sh/2+16);
-  }
+  ctx.fillStyle = 'rgba(0,0,0,0.6)'; ctx.fillRect(sx+sw/2-80, sy+sh/2-25, 160, 50);
+  ctx.fillStyle='#fff'; ctx.textAlign="center"; ctx.font="bold 16px Segoe UI"; ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx+sw/2, sy+sh/2);
+  ctx.font="10px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.7)"; ctx.fillText(`${mName} · ${nW}×${nH} 模組`, sx+sw/2, sy+sh/2+16);
 
   // 人物
   if (state.isPersonLoaded) {
     const ph = 1.78 * scale, pw = ph * (state.personImg.width/state.personImg.height);
     ctx.drawImage(state.personImg, sx-90-pw/2, oy+dh-ph, pw, ph);
-    ctx.fillStyle="rgba(255,255,255,0.4)"; ctx.font="10px Inter"; ctx.fillText("178cm / 5'10\"", sx-90, oy+dh+15);
+    ctx.fillStyle="rgba(255,255,255,0.6)"; ctx.font="10px Segoe UI"; ctx.fillText("178cm / 5'10\"", sx-90, oy+dh+15);
   }
 }
 
 function exportPDF() {
   const d = lastCalc, now = new Date();
-  document.getElementById('ps-date').innerText = `報告日期：${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+  document.getElementById('ps-date').innerText = `報告日期：${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')}`;
   document.getElementById('ps-series').innerText = d.s.name;
   document.getElementById('ps-pitch').innerText = `${d.m.pitch} mm`;
   document.getElementById('ps-modsize').innerText = `${d.s.modW} × ${d.s.modH} mm`;
   document.getElementById('ps-modres').innerText = `${d.m.mW} × ${d.m.mH} px`;
   document.getElementById('ps-density').innerText = `${d.m.density.toLocaleString()} Dot/m²`;
-  document.getElementById('ps-bright').innerText = `${d.m.bright} nits`;
+  document.getElementById('ps-bright').innerText = `${d.m.bright} cd/m²`;
+  document.getElementById('ps-angle').innerText = d.s.angle;
   document.getElementById('ps-refresh').innerText = d.s.refresh;
   
-  const resGrid = document.getElementById('ps-grid-res'); resGrid.innerHTML = `
+  const resGrid = document.getElementById('ps-grid-res'); 
+  resGrid.innerHTML = `
     <div class="ps-res-card accent"><div class="ps-rv">${d.nW} × ${d.nH}</div><div class="ps-rl">模組配置 W×H</div></div>
     <div class="ps-res-card accent"><div class="ps-rv">${d.nW*d.nH} 片</div><div class="ps-rl">模組總數</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()} × ${d.resH.toLocaleString()}</div><div class="ps-rl">畫面解析度</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()}×${d.resH.toLocaleString()}</div><div class="ps-rl">解析度 (PX)</div></div>
     <div class="ps-res-card"><div class="ps-rv">${d.diag}"</div><div class="ps-rl">對角線 (吋)</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)} × ${d.actH.toFixed(2)} m</div><div class="ps-rl">實際尺寸 (M)</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)}×${d.actH.toFixed(2)} m</div><div class="ps-rl">實際尺寸 (M)</div></div>
     <div class="ps-res-card"><div class="ps-rv">${d.pAvg} W</div><div class="ps-rl">平均功耗</div></div>
     <div class="ps-res-card"><div class="ps-rv">${d.pMax} W</div><div class="ps-rl">最大功耗</div></div>
     <div class="ps-res-card"><div class="ps-rv">≥ ${d.m.pitch} m</div><div class="ps-rl">最近觀賞距離</div></div>
@@ -564,10 +602,8 @@ function exportPDF() {
 }
 
 function loadBg(input) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { const img = new Image(); img.onload = () => { state.bgImg = img; state.isBgLoaded = true; update(); }; img.src = e.target.result; }; r.readAsDataURL(input.files[0]); } }
-function resetBg() { state.bgImg = null; state.isBgLoaded = false; update(); }
 function openContact() { document.getElementById('contactModal').classList.add('open'); }
 function closeContact() { document.getElementById('contactModal').classList.remove('open'); }
-function setLang(l, b) { alert('切換語言功能已就緒 (僅示意)'); }
 </script>
 </body>
 </html>
