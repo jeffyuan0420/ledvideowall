@@ -21,6 +21,7 @@
   --blue: #3b82f6;
   --green: #10b981;
   --glass: blur(12px);
+  --line-green: #06c755;
 }
 
 /* ─── RESET ─────────────────────────────────────────────────── */
@@ -44,13 +45,12 @@ header {
 }
 .logo { display: flex; align-items: center; gap: 12px; height: 100%; }
 .logo-img {
-  height: 40px; /* 控制 Logo 高度 */
+  height: 40px;
   width: auto;
   display: block;
   object-fit: contain;
 }
 
-/* 備用 Logo 樣式（若圖片加載失敗時顯示） */
 .logo-fallback { display: flex; align-items: center; gap: 12px; }
 .logo-icon {
   width: 36px; height: 36px; background: var(--accent);
@@ -70,6 +70,8 @@ header {
   background: rgba(255,255,255,0.05); color: var(--text);
 }
 .hdr-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
+.btn-line { background: var(--line-green); color: #fff; border: none; }
+.btn-line:hover { background: #05b04a; box-shadow: 0 4px 12px rgba(6, 199, 85, 0.3); }
 .btn-primary { background: var(--accent); border: none; color: #fff; }
 .btn-primary:hover { background: var(--accent-hover); box-shadow: 0 4px 12px var(--accent-dim); }
 
@@ -106,7 +108,6 @@ header {
 }
 .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* Series Tabs */
 .series-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
 .series-card {
   padding: 10px 4px; border: 1px solid var(--border); background: rgba(255,255,255,0.03);
@@ -117,7 +118,6 @@ header {
 .series-card .name { font-size: 11px; font-weight: 600; color: var(--muted); }
 .series-card.active .name { color: #fff; }
 
-/* Pitch Grid */
 .pitch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .pitch-card {
   background: rgba(0,0,0,0.2); border: 1.5px solid var(--border);
@@ -128,7 +128,6 @@ header {
 .pitch-val { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 2px; }
 .pitch-unit { font-size: 9px; color: var(--muted); text-transform: uppercase; }
 
-/* Input Fields */
 .input-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 .field-label { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; display: block; }
 .input-box {
@@ -198,7 +197,34 @@ header {
 .modal-body { padding: 24px; }
 .modal-footer { padding: 16px 24px; background: rgba(0,0,0,0.2); display: flex; gap: 12px; }
 
-/* ─── MOBILE ─────────────────────────────────────────────────── */
+/* ─── PRINT SHEET ──────────────────────────────────────────── */
+.print-sheet { display: none; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  header, .app { display: none !important; }
+  .print-sheet { display: block !important; background: #fff !important; color: #000 !important; }
+  body { background: #fff !important; color: #111 !important; overflow: visible !important; }
+  .ps-page { padding: 40px; max-width: 900px; margin: 0 auto; font-family: 'Segoe UI', sans-serif; }
+  .ps-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 4px solid #ff0022; padding-bottom: 20px; margin-bottom: 30px; }
+  .ps-logo-area { display: flex; align-items: center; gap: 15px; }
+  .ps-company { font-size: 24px; font-weight: 800; color: #111; }
+  .ps-company span { color: #ff0022; }
+  .ps-doc-title { text-align: right; }
+  .ps-section { margin-bottom: 30px; }
+  .ps-section-title { font-size: 14px; font-weight: 700; color: #777; text-transform: uppercase; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+  .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ps-row { display: flex; justify-content: space-between; padding: 10px; background: #f9f9f9; border-radius: 6px; font-size: 14px; }
+  .ps-val { font-weight: 700; }
+  .ps-results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .ps-result-card { background: #f0f0f0; border-radius: 10px; padding: 15px; text-align: center; border: 1px solid #e0e0e0; }
+  .ps-result-card.accent { background: #fff0f1; border-color: #ffd0d3; }
+  .ps-result-card.accent .ps-rv { color: #ff0022; }
+  .ps-rv { font-size: 20px; font-weight: 900; margin-bottom: 5px; }
+  .ps-rl { font-size: 10px; color: #888; text-transform: uppercase; font-weight: 700; }
+  .ps-footer { margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; font-size: 12px; color: #666; display: flex; justify-content: space-between; }
+}
+
+/* ─── MOBILE RWD ─── */
 @media (max-width: 1024px) {
   .app { flex-direction: column; overflow-y: auto; height: auto; }
   .left-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); height: auto; }
@@ -210,14 +236,6 @@ header {
   header { height: auto; padding: 12px; flex-direction: column; gap: 12px; }
   .results-bar { grid-template-columns: repeat(2, 1fr); }
   .res-item:nth-child(2n) { border-right: none; }
-  .right-panel { height: 400px; }
-}
-
-/* ─── PRINT ──────────────────────────────────────────────────── */
-@media print {
-  header, .left-panel, .floating-tools, .results-bar { display: none !important; }
-  .app, .right-panel { height: auto !important; overflow: visible !important; }
-  #mainCanvas { max-width: 100%; page-break-inside: avoid; }
 }
 </style>
 </head>
@@ -225,10 +243,7 @@ header {
 
 <header>
   <div class="logo">
-    <!-- 已將 src 修改為您提到的 logo.png -->
     <img src="logo.png" alt="盛源 PERSONA Logo" class="logo-img" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='flex';">
-    
-    <!-- 圖片載入失敗時的備用方案 -->
     <div id="logoFallback" class="logo-fallback" style="display:none;">
       <div class="logo-icon">P</div>
       <div class="logo-text-wrap">
@@ -243,21 +258,24 @@ header {
       <button class="lang-btn active" onclick="changeLang('zh', this)">中</button>
       <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
     </div>
-    <button class="hdr-btn" onclick="window.print()">
-      <span data-zh="列印 / PDF" data-en="Print / PDF">列印 / PDF</span>
+    <!-- 還原 LINE 按鈕 -->
+    <button class="hdr-btn btn-line" onclick="window.open('https://line.me/R/ti/p/@touchpersona', '_blank')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.89c.50 0 .907.41.907.91s-.407.91-.907.91H17.59v1.077h1.775c.50 0 .907.41.907.91s-.407.91-.907.91H16.68a.908.908 0 0 1-.907-.91V9.89c0-.50.407-.91.907-.91h2.685zm-5.07 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91s-.907-.41-.907-.91V9.89c0-.5.407-.91.907-.91zm-2.235 0c.5 0 .907.41.907.91v2.43l-1.866-2.924a.91.91 0 0 0-.769-.416.908.908 0 0 0-.907.91v3.808c0 .5.407.91.907.91s.907-.41.907-.91v-2.43l1.866 2.924c.17.267.463.416.769.416.5 0 .907-.41.907-.91V9.89c0-.5-.407-.91-.907-.91zm-4.16 0c.5 0 .907.41.907.91v3.808c0 .5-.407.91-.907.91H5.214a.908.908 0 0 1-.907-.91V9.89c0-.5.407-.91.907-.91H7.9zM12 2C6.477 2 2 6.145 2 11.25c0 4.537 3.646 8.346 8.57 9.098.334.072.786.22.9.505.103.259.067.665.033.927l-.147.868c-.045.258-.207 1.01.885.55 1.092-.458 5.89-3.465 8.036-5.931C21.456 15.43 22 13.41 22 11.25 22 6.145 17.523 2 12 2z"/></svg>
+      <span data-zh="LINE 洽詢" data-en="LINE Chat">LINE 洽詢</span>
+    </button>
+    <!-- 還原匯出按鈕功能 -->
+    <button class="hdr-btn" onclick="exportPDF()">
+      📄 <span data-zh="匯出規格書" data-en="Export Spec">匯出規格書</span>
     </button>
     <button class="hdr-btn btn-primary" onclick="openContact()">
-      <span data-zh="預約諮詢" data-en="Book Inquiry">預約諮詢</span>
+      ✉ <span data-zh="聯繫我們" data-en="Contact Us">聯繫我們</span>
     </button>
   </div>
 </header>
 
 <main class="app">
-  <!-- 其餘部分保持不變 -->
-  <!-- ... (省略中間重複代碼) ... -->
   <aside class="left-panel">
     <div class="left-scroll">
-      
       <div class="section-group">
         <div class="section-title" data-zh="產品系列" data-en="Series">產品系列</div>
         <div class="series-grid" id="seriesTabs">
@@ -284,14 +302,14 @@ header {
           <div>
             <label class="field-label" data-zh="寬度" data-en="Width">寬度</label>
             <div class="input-box">
-              <input type="number" id="inW" value="3.8" step="0.1" min="0.1" oninput="update()">
+              <input type="number" id="inW" value="3.0" step="0.1" min="0.1" oninput="update()">
               <div class="input-unit">m</div>
             </div>
           </div>
           <div>
             <label class="field-label" data-zh="高度" data-en="Height">高度</label>
             <div class="input-box">
-              <input type="number" id="inH" value="2.1" step="0.1" min="0.1" oninput="update()">
+              <input type="number" id="inH" value="2.0" step="0.1" min="0.1" oninput="update()">
               <div class="input-unit">m</div>
             </div>
           </div>
@@ -331,14 +349,12 @@ header {
           <tr><td data-zh="平均功耗" data-en="Avg Power">平均功耗</td><td id="sp-pwr">-</td></tr>
         </table>
       </div>
-
     </div>
   </aside>
 
   <section class="right-panel">
     <div class="canvas-container" id="cvsWrap">
       <canvas id="mainCanvas"></canvas>
-      
       <div class="floating-tools">
         <button class="tool-btn" onclick="document.getElementById('fileIn').click()">
           📷 <span data-zh="上傳背景" data-en="Background">上傳背景</span>
@@ -401,11 +417,64 @@ header {
   </div>
 </div>
 
+<!-- 還原匯出規格書 HTML 結構 -->
+<div class="print-sheet" id="printSheet">
+  <div class="ps-page">
+    <div class="ps-header">
+      <div class="ps-logo-area">
+        <img src="logo.png" style="height: 50px; width: auto;" alt="Logo">
+        <div class="ps-company">盛源 <span>PERSONA</span><br><small style="font-size: 10px; color: #888;">LED 電視牆 · 專業顯示方案</small></div>
+      </div>
+      <div class="ps-doc-title">
+        <h2 style="font-size: 18px; margin: 0;">LED 電視牆 規格配置表</h2>
+        <p id="ps-date" style="font-size: 11px; margin: 5px 0 0;">-</p>
+      </div>
+    </div>
+    <div class="ps-section">
+      <div class="ps-section-title">產品參數細節</div>
+      <div class="ps-grid">
+        <div class="ps-row"><span class="ps-key">產品系列</span><span class="ps-val" id="ps-series">-</span></div>
+        <div class="ps-row"><span class="ps-key">像素間距</span><span class="ps-val" id="ps-pitch">-</span></div>
+        <div class="ps-row"><span class="ps-key">模組尺寸</span><span class="ps-val" id="ps-modsize">-</span></div>
+        <div class="ps-row"><span class="ps-key">模組解析度</span><span class="ps-val" id="ps-modres">-</span></div>
+        <div class="ps-row"><span class="ps-key">像素密度</span><span class="ps-val" id="ps-density">-</span></div>
+        <div class="ps-row"><span class="ps-key">最大亮度</span><span class="ps-val" id="ps-bright">-</span></div>
+        <div class="ps-row"><span class="ps-key">更新頻率</span><span class="ps-val" id="ps-refresh">-</span></div>
+        <div class="ps-row"><span class="ps-key">輸入電壓</span><span class="ps-val">AC 100~240V 50/60Hz</span></div>
+      </div>
+    </div>
+    <div class="ps-section">
+      <div class="ps-section-title">配置計算結果</div>
+      <div class="ps-results-grid">
+        <div class="ps-result-card accent"><div class="ps-rv" id="ps-modules">-</div><div class="ps-rl">模組配置 W×H</div></div>
+        <div class="ps-result-card accent"><div class="ps-rv" id="ps-total">-</div><div class="ps-rl">模組總數</div></div>
+        <div class="ps-result-card"><div class="ps-rv" id="ps-res">-</div><div class="ps-rl">畫面解析度</div></div>
+        <div class="ps-result-card"><div class="ps-rv" id="ps-diag">-</div><div class="ps-rl">對角線 (吋)</div></div>
+        <div class="ps-result-card"><div class="ps-rv" id="ps-size">-</div><div class="ps-rl">實際尺寸 (m)</div></div>
+        <div class="ps-result-card"><div class="ps-rv" id="ps-pwr">-</div><div class="ps-rl">估算功耗</div></div>
+        <div class="ps-result-card"><div class="ps-rv" id="ps-dist">-</div><div class="ps-rl">最近觀賞距離</div></div>
+        <div class="ps-result-card"><div class="ps-rv" id="ps-quality">-</div><div class="ps-rl">畫面品質等級</div></div>
+      </div>
+    </div>
+    <div class="ps-footer">
+      <div>
+        <strong>盛源精密工業股份有限公司 PERSONA</strong><br>
+        📍 台北總公司：新北市新莊區新北大道二段219號8樓<br>
+        ☎ 電話：02-2290-0882 | 💬 LINE：@touchpersona
+      </div>
+      <div style="text-align: right;">
+        本報告由系統自動生成，僅供參考。<br>
+        實際安裝規格請洽業務人員。
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-// ── 產品數據庫 ──
 const DB = {
   indoor_cob: {
     modW: 150, modH: 168.75,
+    refresh: '1920~3840 Hz',
     models: [
       { name: 'P0.62', pitch: 0.62, mW: 240, mH: 270, bright: 600, pwr: 470 },
       { name: 'P0.93', pitch: 0.93, mW: 160, mH: 180, bright: 600, pwr: 370 },
@@ -415,6 +484,7 @@ const DB = {
   },
   indoor_smd: {
     modW: 320, modH: 160,
+    refresh: '3840 Hz',
     models: [
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, bright: 450, pwr: 510 },
       { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, bright: 450, pwr: 470 },
@@ -424,6 +494,7 @@ const DB = {
   },
   outdoor: {
     modW: 320, modH: 160,
+    refresh: '3840 Hz',
     models: [
       { name: 'P2.5', pitch: 2.5, mW: 128, mH: 64, bright: 4200, pwr: 597 },
       { name: 'P3',   pitch: 3.0, mW: 104, mH: 52, bright: 4200, pwr: 724 },
@@ -471,15 +542,8 @@ function loadDefaultBg() {
 function loadPersonImg() {
   const img = new Image();
   img.src = "LED計算人物圖.png";
-  img.onload = () => {
-    state.personImg = img;
-    state.isPersonLoaded = true;
-    update();
-  };
-  img.onerror = () => {
-    console.warn("人物圖片載入失敗，將使用備用繪圖模式。");
-    state.isPersonLoaded = false;
-  };
+  img.onload = () => { state.personImg = img; state.isPersonLoaded = true; update(); };
+  img.onerror = () => { state.isPersonLoaded = false; };
 }
 
 function selectSeries(key) {
@@ -504,12 +568,15 @@ function selectSeries(key) {
 }
 
 function applyRatio(r, btn) {
-  const curW = parseFloat(document.getElementById('inW').value) || 3.8;
+  const curW = parseFloat(document.getElementById('inW').value) || 3.0;
   document.getElementById('inH').value = Math.max(0.1, (curW / r)).toFixed(2);
   document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   update();
 }
+
+// 用於存儲最後計算結果以供匯出
+let lastCalc = {};
 
 function update() {
   const series = DB[state.series];
@@ -518,29 +585,66 @@ function update() {
   const reqH = Math.max(0.1, parseFloat(document.getElementById('inH').value) || 1);
   const wallW = Math.max(0.5, parseFloat(document.getElementById('wallW').value) || 5);
   const wallH = Math.max(0.5, parseFloat(document.getElementById('wallH').value) || 3);
+
   const nW = Math.max(1, Math.round((reqW * 1000) / series.modW));
   const nH = Math.max(1, Math.round((reqH * 1000) / series.modH));
   const actW = (nW * series.modW) / 1000;
   const actH = (nH * series.modH) / 1000;
   const resW = nW * model.mW;
   const resH = nH * model.mH;
+
   document.getElementById('res-modules').innerText = `${nW} × ${nH}`;
-  document.getElementById('res-resolution').innerText = `${resW} × ${resH}`;
+  document.getElementById('res-resolution').innerText = `${resW.toLocaleString()} × ${resH.toLocaleString()}`;
   document.getElementById('res-size').innerText = `${actW.toFixed(2)} × ${actH.toFixed(2)} m`;
   document.getElementById('res-diag').innerText = (Math.sqrt(actW**2 + actH**2) / 0.0254).toFixed(0) + '"';
-  document.getElementById('res-power').innerText = `Max: ${Math.round(actW * actH * model.pwr)}W`;
+  const totalPwr = Math.round(actW * actH * model.pwr);
+  document.getElementById('res-power').innerText = `Max: ${totalPwr}W`;
   document.getElementById('res-dist').innerText = `≥ ${model.pitch}m`;
+  
   let tier = 'SD';
   if (resW >= 3840) tier = '4K UHD';
   else if (resW >= 2560) tier = '2K QHD';
   else if (resW >= 1920) tier = 'Full HD';
   else if (resW >= 1280) tier = 'HD';
   document.getElementById('res-quality').innerText = tier;
+
   document.getElementById('sp-density').innerText = (1000000 / (model.pitch**2)).toLocaleString(undefined, {maximumFractionDigits:0}) + " dot/m²";
   document.getElementById('sp-bright').innerText = model.bright + " nits";
   document.getElementById('sp-refresh').innerText = "≥ 3840 Hz";
   document.getElementById('sp-pwr').innerText = Math.round(model.pwr / 3) + " W/m²";
+
+  lastCalc = { series, model, nW, nH, actW, actH, resW, resH, tier, totalPwr, wallW, wallH };
   draw(actW, actH, wallW, wallH, nW, nH, resW, resH, model.name);
+}
+
+// 繪製標註線的 Helper
+function drawDimension(x1, y1, x2, y2, text, color, isVertical) {
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  
+  // Ticks
+  if (isVertical) {
+    ctx.beginPath(); ctx.moveTo(x1-5, y1); ctx.lineTo(x1+5, y1); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2-5, y2); ctx.lineTo(x2+5, y2); ctx.stroke();
+    ctx.save();
+    ctx.translate(x1 - 10, (y1 + y2) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.font = "bold 11px Segoe UI";
+    ctx.textAlign = "center";
+    ctx.fillText(text, 0, 0);
+    ctx.restore();
+  } else {
+    ctx.beginPath(); ctx.moveTo(x1, y1-5); ctx.lineTo(x1, y1+5); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2, y2-5); ctx.lineTo(x2, y2+5); ctx.stroke();
+    ctx.font = "bold 11px Segoe UI";
+    ctx.textAlign = "center";
+    ctx.fillText(text, (x1 + x2) / 2, y1 - 8);
+  }
 }
 
 function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, modelName) {
@@ -549,43 +653,36 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, modelName) {
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = '#0a0d14';
   ctx.fillRect(0, 0, W, H);
+
   const margin = 80;
   const availableW = Math.max(1, W - margin * 2);
   const availableH = Math.max(1, H - margin * 2);
   const scale = Math.min(availableW / wallW, availableH / wallH);
+  
   const dw = wallW * scale;
   const dh = wallH * scale;
   const ox = (W - dw) / 2;
   const oy = (H - dh) / 2;
+
+  // 1. 畫牆壁
   ctx.fillStyle = '#1a1d26';
-  ctx.shadowColor = 'rgba(0,0,0,0.5)';
-  ctx.shadowBlur = 30;
   ctx.fillRect(ox, oy, dw, dh);
-  ctx.shadowBlur = 0;
-  ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-  ctx.lineWidth = 1;
-  const bSize = scale * 0.4;
-  if (bSize > 1) {
-    for(let x = ox; x < ox+dw; x += bSize) { ctx.beginPath(); ctx.moveTo(x, oy); ctx.lineTo(x, oy+dh); ctx.stroke(); }
-    for(let y = oy; y < oy+dh; y += bSize/2) { ctx.beginPath(); ctx.moveTo(ox, y); ctx.lineTo(ox+dw, y); ctx.stroke(); }
-  }
+
+  // 牆面標註 (藍色)
+  drawDimension(ox, oy - 20, ox + dw, oy - 20, `牆壁 ${wallW.toFixed(1)} m`, '#4a9eff', false);
+  drawDimension(ox + dw + 20, oy, ox + dw + 20, oy + dh, `牆壁 ${wallH.toFixed(1)} m`, '#4a9eff', true);
+
+  // 2. 畫 LED 螢幕
   const sw = actW * scale;
   const sh = actH * scale;
   const sx = ox + (dw - sw) / 2;
   const sy = oy + (dh - sh) / 2;
-  const radius = Math.max(1, sw);
-  try {
-    const grd = ctx.createRadialGradient(sx+sw/2, sy+sh/2, 1, sx+sw/2, sy+sh/2, radius);
-    grd.addColorStop(0, 'rgba(59, 130, 246, 0.15)');
-    grd.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grd;
-    ctx.fillRect(sx-50, sy-50, sw+100, sh+100);
-  } catch (e) {}
+
   ctx.save();
   ctx.beginPath();
-  if (ctx.roundRect) ctx.roundRect(sx, sy, sw, sh, Math.min(4, sw/2, sh/2));
-  else ctx.rect(sx, sy, sw, sh);
+  if (ctx.roundRect) ctx.roundRect(sx, sy, sw, sh, 4); else ctx.rect(sx, sy, sw, sh);
   ctx.clip();
+
   if (state.isBgLoaded && state.bgImg) {
     ctx.drawImage(state.bgImg, sx, sy, sw, sh);
     ctx.fillStyle = 'rgba(0,0,10,0.3)';
@@ -594,35 +691,39 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, modelName) {
     ctx.fillStyle = '#000';
     ctx.fillRect(sx, sy, sw, sh);
   }
-  ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+
+  // 模組格線
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
   ctx.lineWidth = 0.5;
-  if (sw > 0 && nW > 0) { for(let i=1; i<nW; i++) { let lx = sx + (sw/nW)*i; ctx.beginPath(); ctx.moveTo(lx, sy); ctx.lineTo(lx, sy+sh); ctx.stroke(); } }
-  if (sh > 0 && nH > 0) { for(let j=1; j<nH; j++) { let ly = sy + (sh/nH)*j; ctx.beginPath(); ctx.moveTo(sx, ly); ctx.lineTo(sx+sw, ly); ctx.stroke(); } }
+  for(let i=1; i<nW; i++) { let lx = sx + (sw/nW)*i; ctx.beginPath(); ctx.moveTo(lx, sy); ctx.lineTo(lx, sy+sh); ctx.stroke(); }
+  for(let j=1; j<nH; j++) { let ly = sy + (sh/nH)*j; ctx.beginPath(); ctx.moveTo(sx, ly); ctx.lineTo(sx+sw, ly); ctx.stroke(); }
   ctx.restore();
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect(sx, sy, sw, sh);
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 12px Inter';
-  ctx.textAlign = 'center';
-  ctx.fillText(`${actW.toFixed(2)}m`, sx + sw/2, sy + sh + 20);
-  ctx.save();
-  ctx.translate(sx - 15, sy + sh/2);
-  ctx.rotate(-Math.PI/2);
-  ctx.fillText(`${actH.toFixed(2)}m`, 0, 0);
-  ctx.restore();
-  if (sw > 120 && sh > 30) {
+
+  // 螢幕邊框與標註 (白色)
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.strokeRect(sx, sy, sw, sh);
+  drawDimension(sx, sy + sh + 20, sx + sw, sy + sh + 20, `${actW.toFixed(2)} m`, '#fff', false);
+  drawDimension(sx - 20, sy, sx - 20, sy + sh, `${actH.toFixed(2)} m`, '#fff', true);
+
+  // 還原模組片數標籤 (紅色 Badge)
+  const badgeW = 60, badgeH = 20;
+  ctx.fillStyle = '#ff0022';
+  if (ctx.roundRect) ctx.roundRect(sx + sw - badgeW - 5, sy + 5, badgeW, badgeH, 4); else ctx.fillRect(sx + sw - badgeW - 5, sy + 5, badgeW, badgeH);
+  ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.font = "bold 11px Inter"; ctx.textAlign = "center";
+  ctx.fillText(`${nW * nH} 片`, sx + sw - badgeW / 2 - 5, sy + 19);
+
+  // 螢幕中央資訊
+  if (sw > 100) {
     ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    const labelW = 120, labelH = 30;
-    const lx = sx + sw/2 - labelW/2, ly = sy + sh/2 - labelH/2;
-    if (ctx.roundRect) ctx.roundRect(lx, ly, labelW, labelH, 15);
-    else ctx.rect(lx, ly, labelW, labelH);
-    ctx.fill();
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 13px Inter';
-    ctx.fillText(`${resW} × ${resH} px`, sx + sw/2, sy + sh/2 + 5);
+    ctx.fillRect(sx + sw/2 - 70, sy + sh/2 - 25, 140, 50);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Inter'; ctx.textAlign = 'center';
+    ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx + sw/2, sy + sh/2 - 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.7)'; ctx.font = '10px Inter';
+    ctx.fillText(`${modelName} · ${nW}×${nH} 模組`, sx + sw/2, sy + sh/2 + 15);
   }
-  drawHuman(sx - 80, oy + dh, 1.75 * scale);
+
+  // 4. 畫人物
+  drawHuman(sx - 80, oy + dh, 1.78 * scale);
 }
 
 function drawHuman(x, y, h) {
@@ -633,18 +734,35 @@ function drawHuman(x, y, h) {
     const drawW = h * aspect;
     const drawH = h;
     ctx.drawImage(img, x - drawW / 2, y - drawH, drawW, drawH);
-  } else {
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.beginPath(); ctx.arc(x, y - h + h*0.1, Math.max(1, h*0.08), 0, Math.PI*2); ctx.fill();
-    if (ctx.roundRect) { ctx.roundRect(x - h*0.1, y - h*0.82, h*0.2, h*0.4, Math.max(1, h*0.05)); ctx.fill(); }
-    else { ctx.fillRect(x - h*0.1, y - h*0.82, h*0.2, h*0.4); }
-    ctx.fillRect(x - h*0.09, y - h*0.45, h*0.07, h*0.45);
-    ctx.fillRect(x + h*0.02, y - h*0.45, h*0.07, h*0.45);
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '10px Inter'; ctx.textAlign = 'center';
+    ctx.fillText("178cm / 5'10\"", x, y + 15);
   }
-  ctx.fillStyle = 'rgba(255,255,255,0.3)';
-  ctx.font = '10px Inter';
-  ctx.textAlign = 'center';
-  ctx.fillText("175cm", x, y + 15);
+}
+
+// 修復匯出規格書邏輯
+function exportPDF() {
+  const { series, model, nW, nH, actW, actH, resW, resH, tier, totalPwr, wallW, wallH } = lastCalc;
+  const now = new Date();
+  document.getElementById('ps-date').innerText = `報告日期：${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`;
+  document.getElementById('ps-series').innerText = state.series === 'indoor_cob' ? '室內 COB 系列' : (state.series === 'indoor_smd' ? '室內 SMD 系列' : '戶外系列');
+  document.getElementById('ps-pitch').innerText = `${model.pitch} mm`;
+  document.getElementById('ps-modsize').innerText = `${series.modW} × ${series.modH} mm`;
+  document.getElementById('ps-modres').innerText = `${model.mW} × ${model.mH} px`;
+  document.getElementById('ps-density').innerText = (1000000 / (model.pitch**2)).toLocaleString(undefined, {maximumFractionDigits:0}) + " dot/m²";
+  document.getElementById('ps-bright').innerText = `${model.bright} nits`;
+  document.getElementById('ps-refresh').innerText = series.refresh;
+  
+  document.getElementById('ps-modules').innerText = `${nW} × ${nH}`;
+  document.getElementById('ps-total').innerText = `${nW * nH} 片`;
+  document.getElementById('ps-res').innerText = `${resW.toLocaleString()} × ${resH.toLocaleString()} px`;
+  document.getElementById('ps-diag').innerText = `${(Math.sqrt(actW**2 + actH**2) / 0.0254).toFixed(0)}"`;
+  document.getElementById('ps-size').innerText = `${actW.toFixed(2)} × ${actH.toFixed(2)} m`;
+  document.getElementById('ps-pwr').innerText = `${totalPwr} W`;
+  document.getElementById('ps-dist').innerText = `≥ ${model.pitch} m`;
+  document.getElementById('ps-quality').innerText = tier;
+
+  window.print();
 }
 
 function changeLang(l, btn) {
