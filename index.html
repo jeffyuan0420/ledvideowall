@@ -198,7 +198,7 @@ header {
   .ps-results-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
   .ps-res-card { background: #f4f4f4; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; text-align: center; }
   .ps-res-card.accent { background: #fff0f1; border-color: #ffd0d3; }
-  .ps-rv { font-size: 18px; font-weight: 900; margin-bottom: 6px; }
+  .ps-rv { font-size: 20px; font-weight: 900; margin-bottom: 6px; }
   .ps-res-card.accent .ps-rv { color: #e3001b; }
   .ps-rl { font-size: 10px; color: #777; font-weight: 700; text-transform: uppercase; }
   .ps-footer { margin-top: 50px; border-top: 1px solid #eee; padding-top: 25px; font-size: 12px; color: #666; display: flex; justify-content: space-between; align-items: flex-start; }
@@ -284,7 +284,7 @@ header {
         <button class="toggle-btn" id="volt-220" onclick="setVolt(220, this)">⚡ 220V</button>
       </div>
 
-      <!-- 新增：報價體系選擇 -->
+      <!-- 報價體系選擇 -->
       <div class="section-title" data-zh="報價體系 (未稅)" data-en="Pricing System">報價體系 (未稅)</div>
       <div class="toggle-row">
         <button class="toggle-btn active-green" id="price-dealer" onclick="setPriceType('dealer', this)">📦 經銷價</button>
@@ -383,18 +383,20 @@ header {
 </div>
 
 <script>
-// ── 產品報價與規格資料庫 ──
+// ── 產品報價與規格資料庫 (更新：COB 修改為 320x160mm) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB 系列', en: 'Indoor COB Series' }, 
-    modW: 150, modH: 168.75, angle: '160° / 160°', refresh: '1920~3840 Hz',
+    modW: 320, // 已從 150 修正為 320
+    modH: 160, // 已從 168.75 修正為 160
+    angle: '160° / 160°', refresh: '1920~3840 Hz',
     info: { zh: '💡 COB 技術：晶粒直接封裝於板上，表面平整，抗衝擊、防塵防潮。', en: '💡 COB Tech: Direct chip bonding, smooth surface, impact & moisture proof.' },
     models: [
-      { name: 'P0.62', pitch: 0.62, mW: 240, mH: 270, bright: 600, avg: 157, max: 470, density: 2560000 },
-      { name: 'P0.93', pitch: 0.93, mW: 160, mH: 180, bright: 600, avg: 123, max: 370, density: 1137777 },
-      { name: 'P1.25', pitch: 1.25, mW: 120, mH: 135, bright: 600, avg: 115, max: 346, density: 640000 },
-      { name: 'P1.53(C)', pitch: 1.53, mW: 208, mH: 104, bright: 600, avg: 107, max: 321, density: 422500, 
-        price: { dealer: [2500, 2800], direct: [3500, 3800] } } // 符合 image_337f66.jpg
+      { name: 'P0.62', pitch: 0.62, mW: 512, mH: 256, bright: 600, avg: 157, max: 470, density: 2601040 },
+      { name: 'P0.93', pitch: 0.93, mW: 344, mH: 172, bright: 600, avg: 123, max: 370, density: 1156681 },
+      { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, bright: 600, avg: 115, max: 346, density: 640000 },
+      { name: 'P1.53(C)', pitch: 1.53, mW: 208, mH: 104, bright: 600, avg: 107, max: 321, density: 427186, 
+        price: { dealer: [2500, 2800], direct: [3500, 3800] } } 
     ]
   },
   indoor_smd: {
@@ -402,10 +404,10 @@ const DB = {
     modW: 320, modH: 160, angle: '140° / 130°', refresh: '3840 Hz',
     info: { zh: '💡 SMD 技術：色彩鮮豔亮度高。GOB 增加保護膠體，提升防護力。', en: '💡 SMD Tech: High brightness. GOB adds resin protection.' },
     models: [
-      { name: 'P1.86(S)', pitch: 1.86, mW: 172, mH: 86,  bright: 450, avg: 147, max: 439, density: 288906,
-        price: { dealer: [1500, 1600], direct: [2000, 2100] } }, // 符合 image_337f66.jpg
-      { name: 'P1.86(G)', pitch: 1.86, mW: 172, mH: 86,  bright: 450, avg: 147, max: 439, density: 288906,
-        price: { dealer: [1800, 1900], direct: [2400, 2600] } }, // 符合 image_337f66.jpg
+      { name: 'P1.86(S)', pitch: 1.86, mW: 172, mH: 86,  bright: 450, avg: 147, max: 439, density: 289137,
+        price: { dealer: [1500, 1600], direct: [2000, 2100] } },
+      { name: 'P1.86(G)', pitch: 1.86, mW: 172, mH: 86,  bright: 450, avg: 147, max: 439, density: 289137,
+        price: { dealer: [1800, 1900], direct: [2400, 2600] } }, 
       { name: 'P2',    pitch: 2.0,  mW: 160, mH: 80,  bright: 450, avg: 147, max: 439, density: 250000 },
       { name: 'P2.5',  pitch: 2.5,  mW: 128, mH: 64,  bright: 450, avg: 153, max: 457, density: 160000 }
     ]
@@ -416,7 +418,7 @@ const DB = {
     info: { zh: '💡 戶外高亮度型：亮度 ≥4200 cd/m²，強烈陽光下清晰顯示。', en: '💡 Outdoor High Bright: ≥4200 nits, clear under direct sunlight.' },
     models: [
       { name: 'P2.5', pitch: 2.5, mW: 128, mH: 64, bright: 4200, avg: 199, max: 597, density: 160000 },
-      { name: 'P3',   pitch: 3.0, mW: 104, mH: 52, bright: 4200, avg: 241, max: 724, density: 105625 }
+      { name: 'P3',   pitch: 3.0, mW: 104, mH: 52, bright: 4200, avg: 241, max: 724, density: 111111 }
     ]
   }
 };
@@ -429,7 +431,6 @@ let state = {
 const canvas = document.getElementById('mainCanvas'), ctx = canvas.getContext('2d');
 let lastCalc = {};
 
-// 預載背景與人物
 const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
 const defaultBg = new Image();
 defaultBg.crossOrigin = "anonymous";
@@ -501,7 +502,6 @@ function update() {
   const pMax = Math.round((actW * actH) * m.max);
   const amp = (pMax / state.volt).toFixed(1);
 
-  // 報價計算
   let priceStr = "詢價中";
   let unitPriceStr = "-";
   if (m.price) {
@@ -512,7 +512,6 @@ function update() {
     unitPriceStr = `${range[0].toLocaleString()} ~ ${range[1].toLocaleString()} 元`;
   }
 
-  // UI 更新
   document.getElementById('res-modules').innerText = `${nW} × ${nH}`;
   document.getElementById('res-total').innerText = `${totalMods} ${state.lang==='zh'?'片':'pcs'}`;
   document.getElementById('res-resolution').innerText = `${resW.toLocaleString()} × ${resH.toLocaleString()}`;
