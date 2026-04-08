@@ -134,7 +134,7 @@ header {
 .ratio-btn:hover { border-color: var(--muted); color: #fff; }
 .ratio-btn.active { border-color: var(--accent); background: var(--accent-dim); color: #fff; }
 
-/* Voltage / Price Type Toggle */
+/* Voltage / Price Toggle */
 .toggle-row { display: flex; gap: 8px; margin-bottom: 22px; }
 .toggle-btn {
   flex: 1; padding: 10px; border: 1.5px solid var(--border);
@@ -165,6 +165,7 @@ header {
   padding: 8px 16px; border-radius: 10px; background: rgba(20,24,36,0.85);
   border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 12px; cursor: pointer; backdrop-filter: blur(10px);
 }
+.upload-hint { font-size: 10px; color: var(--muted); margin-top: 5px; text-align: right; display: block; }
 
 .results-bar { background: var(--panel); border-top: 1px solid var(--border); padding: 18px 24px; display: grid; grid-template-columns: repeat(7, 1fr); }
 .res-item { text-align: center; border-right: 1px solid var(--border); padding: 0 8px; }
@@ -284,7 +285,7 @@ header {
         <button class="toggle-btn" id="volt-220" onclick="setVolt(220, this)">⚡ 220V</button>
       </div>
 
-      <!-- 報價體系選擇 -->
+      <!-- 恢復報價體系 -->
       <div class="section-title" data-zh="報價體系 (未稅)" data-en="Pricing System">報價體系 (未稅)</div>
       <div class="toggle-row">
         <button class="toggle-btn active-green" id="price-dealer" onclick="setPriceType('dealer', this)">📦 經銷價</button>
@@ -310,8 +311,9 @@ header {
       <canvas id="mainCanvas"></canvas>
       <div class="upload-btn-wrap">
         <button class="upload-btn" onclick="document.getElementById('fileIn').click()">
-          📷 <span data-zh="上傳背景圖" data-en="Upload Background">上傳背景圖</span>
+          📷 <span data-zh="上傳現場牆面圖" data-en="Upload Wall Photo">上傳現場牆面圖</span>
         </button>
+        <small class="upload-hint" data-zh="※ 拍照時請讓牆面充滿畫面" data-en="* Fill the frame with the wall"></small>
         <input type="file" id="fileIn" hidden accept="image/*" onchange="loadBg(this)">
       </div>
     </div>
@@ -322,7 +324,7 @@ header {
       <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl" data-zh="畫面解析度 px" data-en="Resolution px">畫面解析度 px</span></div>
       <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl" data-zh="實際尺寸 m" data-en="Actual Size m">實際尺寸 m</span></div>
       <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl" data-zh="對角線 吋" data-en="Diagonal inch">對角線 吋</span></div>
-      <div class="res-item" style="background: rgba(16, 185, 129, 0.1); border-radius: 8px; margin: -5px 0; padding: 5px 8px;"><span class="res-val green" id="res-estPrice">-</span><span class="res-lbl" data-zh="初步報價 (萬)" data-en="Est. Total Price">初步報價 (萬)</span></div>
+      <div class="res-item" style="background: rgba(16, 185, 129, 0.1); border-radius: 8px; margin: -5px 0; padding: 5px 8px;"><span class="res-val green" id="res-estPrice">-</span><span class="res-lbl" data-zh="初步報價 (萬)" data-en="Est. Price (10k)">初步報價 (萬)</span></div>
       <div class="res-item"><span class="res-val" id="res-dist">-</span><span class="res-lbl" data-zh="最近觀賞距離" data-en="Min Distance">最近觀賞距離</span></div>
     </div>
   </section>
@@ -383,19 +385,18 @@ header {
 </div>
 
 <script>
-// ── 產品報價與規格資料庫 (更新：COB 修改為 320x160mm) ──
+// ── 產品資料庫 (補回報價) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB 系列', en: 'Indoor COB Series' }, 
-    modW: 320, // 已從 150 修正為 320
-    modH: 160, // 已從 168.75 修正為 160
+    modW: 320, modH: 160, 
     angle: '160° / 160°', refresh: '1920~3840 Hz',
     info: { zh: '💡 COB 技術：晶粒直接封裝於板上，表面平整，抗衝擊、防塵防潮。', en: '💡 COB Tech: Direct chip bonding, smooth surface, impact & moisture proof.' },
     models: [
       { name: 'P0.62', pitch: 0.62, mW: 512, mH: 256, bright: 600, avg: 157, max: 470, density: 2601040 },
       { name: 'P0.93', pitch: 0.93, mW: 344, mH: 172, bright: 600, avg: 123, max: 370, density: 1156681 },
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, bright: 600, avg: 115, max: 346, density: 640000 },
-      { name: 'P1.53(C)', pitch: 1.53, mW: 208, mH: 104, bright: 600, avg: 107, max: 321, density: 427186, 
+      { name: 'P1.53(C)', pitch: 1.53, mW: 208, mH: 104, bright: 600, avg: 107, max: 321, density: 427186,
         price: { dealer: [2500, 2800], direct: [3500, 3800] } } 
     ]
   },
@@ -425,17 +426,19 @@ const DB = {
 
 let state = { 
   lang: 'zh', series: 'indoor_cob', modelIdx: 0, volt: 110, priceType: 'dealer',
-  bgImg: null, isBgLoaded: false, personImg: null, isPersonLoaded: false 
+  bgImg: null, isBgLoaded: false, 
+  screenStarImg: null, isScreenStarLoaded: false,
+  personImg: null, isPersonLoaded: false 
 };
 
 const canvas = document.getElementById('mainCanvas'), ctx = canvas.getContext('2d');
 let lastCalc = {};
 
-const DEFAULT_BG_URL = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
-const defaultBg = new Image();
-defaultBg.crossOrigin = "anonymous";
-defaultBg.src = DEFAULT_BG_URL;
-defaultBg.onload = () => { state.bgImg = defaultBg; state.isBgLoaded = true; update(); };
+const SCREEN_BG_URL = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
+const screenBg = new Image();
+screenBg.crossOrigin = "anonymous";
+screenBg.src = SCREEN_BG_URL;
+screenBg.onload = () => { state.screenStarImg = screenBg; state.isScreenStarLoaded = true; update(); };
 
 window.onload = () => {
   init(); window.onresize = init;
@@ -474,6 +477,13 @@ function selectSeries(key, btn) {
   update();
 }
 
+function applyRatio(r, btn) {
+  const w = parseFloat(document.getElementById('inW').value);
+  document.getElementById('inH').value = (w / r).toFixed(2);
+  document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+  update();
+}
+
 function setVolt(v, btn) {
   state.volt = v; 
   document.getElementById('volt-110').classList.remove('active-yellow');
@@ -502,6 +512,7 @@ function update() {
   const pMax = Math.round((actW * actH) * m.max);
   const amp = (pMax / state.volt).toFixed(1);
 
+  // 報價運算
   let priceStr = "詢價中";
   let unitPriceStr = "-";
   if (m.price) {
@@ -515,10 +526,10 @@ function update() {
   document.getElementById('res-modules').innerText = `${nW} × ${nH}`;
   document.getElementById('res-total').innerText = `${totalMods} ${state.lang==='zh'?'片':'pcs'}`;
   document.getElementById('res-resolution').innerText = `${resW.toLocaleString()} × ${resH.toLocaleString()}`;
-  document.getElementById('res-size').innerText = `${actW.toFixed(2)} × ${actH.toFixed(2)}`;
+  document.getElementById('res-size').innerText = `${actW.toFixed(2)} × ${actH.toFixed(2)} m`;
   document.getElementById('res-diag').innerText = diag + '"';
-  document.getElementById('res-estPrice').innerText = priceStr;
   document.getElementById('res-dist').innerText = `≥ ${m.pitch}m`;
+  document.getElementById('res-estPrice').innerText = priceStr;
 
   document.getElementById('sp-series').innerText = s.name[state.lang];
   document.getElementById('sp-pitch').innerText = `${m.pitch} mm`;
@@ -552,22 +563,37 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   const margin = 100, scale = Math.min((W - margin*2)/wallW, (H - margin*2)/wallH);
   const dw = wallW * scale, dh = wallH * scale, ox = (W-dw)/2, oy = (H-dh)/2;
 
-  ctx.fillStyle = '#1a1d26'; ctx.fillRect(ox, oy, dw, dh);
+  ctx.fillStyle = '#1a1d26'; 
+  ctx.fillRect(ox, oy, dw, dh);
+
+  if (state.bgImg && state.isBgLoaded) {
+    ctx.drawImage(state.bgImg, ox, oy, dw, dh);
+    ctx.fillStyle = "rgba(0,0,0,0.15)";
+    ctx.fillRect(ox, oy, dw, dh);
+  }
+
   const wallLabel = state.lang === 'zh' ? '牆壁' : 'Wall';
   drawDim(ox, oy-25, ox+dw, oy-25, `${wallLabel} ${wallW.toFixed(1)} m`, '#4a9eff', false);
   drawDim(ox+dw+25, oy, ox+dw+25, oy+dh, `${wallLabel} ${wallH.toFixed(1)} m`, '#4a9eff', true);
 
   const sw = actW * scale, sh = actH * scale, sx = ox+(dw-sw)/2, sy = oy+(dh-sh)/2;
-  ctx.save(); ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip();
+  
+  ctx.save(); 
+  ctx.beginPath(); 
+  ctx.rect(sx, sy, sw, sh); 
+  ctx.clip();
+  
   ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh);
-  if (state.bgImg && state.isBgLoaded) {
-    const imgAR = state.bgImg.width / state.bgImg.height, scrAR = sw / sh;
+  if (state.screenStarImg && state.isScreenStarLoaded) {
+    const imgAR = state.screenStarImg.width / state.screenStarImg.height;
+    const scrAR = sw / sh;
     let drawW, drawH;
     if (imgAR > scrAR) { drawH = sh; drawW = sh * imgAR; } else { drawW = sw; drawH = sw / imgAR; }
-    ctx.drawImage(state.bgImg, sx + (sw - drawW) / 2, sy + (sh - drawH) / 2, drawW, drawH);
-    ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(sx, sy, sw, sh);
+    ctx.drawImage(state.screenStarImg, sx + (sw - drawW) / 2, sy + (sh - drawH) / 2, drawW, drawH);
+    ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(sx, sy, sw, sh);
   }
-  ctx.strokeStyle = 'rgba(255,255,255,0.18)'; ctx.lineWidth = 0.5;
+  
+  ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 0.5;
   for(let i=1; i<nW; i++) { let lx=sx+i*sw/nW; ctx.beginPath(); ctx.moveTo(lx,sy); ctx.lineTo(lx,sy+sh); ctx.stroke(); }
   for(let j=1; j<nH; j++) { let ly=sy+j*sh/nH; ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx+sw,ly); ctx.stroke(); }
   ctx.restore();
@@ -586,9 +612,9 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
     ctx.fillRect(sx+sw/2-80, sy+sh/2-25, 160, 50);
     ctx.fillStyle='#fff'; ctx.textAlign="center"; ctx.font="bold 16px Segoe UI";
     ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx+sw/2, sy+sh/2);
-    ctx.font="11px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
+    ctx.font="10px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
     const modLbl = state.lang === 'zh' ? '模組' : 'Modules';
-    ctx.fillText(`${mName} · ${nW}×${nH} ${modLbl}`, sx+sw/2, sy+sh/2+17);
+    ctx.fillText(`${mName} · ${nW}×${nH} ${modLbl}`, sx+sw/2, sy+sh/2+16);
   }
 
   if (state.isPersonLoaded) {
@@ -599,6 +625,16 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   }
 }
 
+function changeLang(l, btn) {
+  state.lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-zh]').forEach(el => {
+    el.innerText = el.getAttribute('data-' + l);
+  });
+  selectSeries(state.series, document.querySelector(`[data-series="${state.series}"]`));
+}
+
 function exportPDF() {
   const d = lastCalc, now = new Date(); if(!d.m) return;
   const l = state.lang;
@@ -606,10 +642,8 @@ function exportPDF() {
   document.getElementById('ps-series-print').innerText = d.s.name[l];
   document.getElementById('ps-pitch-print').innerText = `${d.m.pitch} mm`;
   document.getElementById('ps-modsize-print').innerText = `${d.s.modW} × ${d.s.modH} mm`;
-  document.getElementById('ps-modres-print').innerText = `${d.m.mW} × ${d.m.mH} px`;
   document.getElementById('ps-density-print').innerText = `${d.m.density.toLocaleString()} Dot/m²`;
   document.getElementById('ps-bright-print').innerText = `${d.m.bright} cd/m²`;
-  document.getElementById('ps-angle-print').innerText = d.s.angle;
   document.getElementById('ps-refresh-print').innerText = d.s.refresh;
   
   const unit = l === 'zh' ? '片' : 'pcs';
@@ -617,27 +651,12 @@ function exportPDF() {
   grid.innerHTML = `
     <div class="ps-res-card accent"><div class="ps-rv">${d.nW} × ${d.nH}</div><div class="ps-rl">${l==='zh'?'模組配置':'Modules WxH'}</div></div>
     <div class="ps-res-card accent"><div class="ps-rv">${d.totalMods} ${unit}</div><div class="ps-rl">${l==='zh'?'模組總數':'Total Modules'}</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()}×${d.resH.toLocaleString()}</div><div class="ps-rl">${l==='zh'?'畫面解析度':'Resolution'} (PX)</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()}×${d.resH.toLocaleString()}</div><div class="ps-rl">${l==='zh'?'畫面解析度':'Resolution'}</div></div>
     <div class="ps-res-card"><div class="ps-rv">${d.diag}"</div><div class="ps-rl">${l==='zh'?'對角線':'Diagonal'}</div></div>
-    <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)}×${d.actH.toFixed(2)} m</div><div class="ps-rl">${l==='zh'?'實際尺寸':'Actual Size'} (M)</div></div>
+    <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)}×${d.actH.toFixed(2)} m</div><div class="ps-rl">${l==='zh'?'實際尺寸':'Actual Size'}</div></div>
     <div class="ps-res-card accent" style="background:#f0fff4"><div class="ps-rv" style="color:#10b981">${d.priceStr} 萬</div><div class="ps-rl">${l==='zh'?'初步報價(未稅)':'Est. Price'}</div></div>
   `;
   window.print();
-}
-
-function applyRatio(r, btn) {
-  const w = parseFloat(document.getElementById('inW').value);
-  document.getElementById('inH').value = (w / r).toFixed(2);
-  document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-  update();
-}
-
-function changeLang(l, btn) {
-  state.lang = l;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('[data-zh]').forEach(el => el.innerText = el.getAttribute('data-' + l));
-  selectSeries(state.series, document.querySelector(`[data-series="${state.series}"]`));
 }
 
 function loadBg(input) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { const img = new Image(); img.onload = () => { state.bgImg = img; state.isBgLoaded = true; update(); }; img.src = e.target.result; }; r.readAsDataURL(input.files[0]); } }
