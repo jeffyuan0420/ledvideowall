@@ -279,13 +279,25 @@ header {
         <button class="ratio-btn" onclick="applyRatio(9/16, this)">9:16</button>
       </div>
 
+      <!-- 找回：場域牆壁實際尺寸 -->
+      <div class="section-title" data-zh="📐 場域牆壁實際尺寸" data-en="📐 Wall Dimensions">📐 場域牆壁實際尺寸</div>
+      <div class="field-group" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div class="field-input">
+          <input type="number" id="wallW" value="6.0" step="0.1" oninput="update()">
+          <div class="field-unit">W m</div>
+        </div>
+        <div class="field-input">
+          <input type="number" id="wallH" value="3.5" step="0.1" oninput="update()">
+          <div class="field-unit">H m</div>
+        </div>
+      </div>
+
       <div class="section-title" data-zh="供電電壓" data-en="Power Supply">供電電壓</div>
       <div class="toggle-row">
         <button class="toggle-btn active-yellow" id="volt-110" onclick="setVolt(110, this)">🔌 110V</button>
         <button class="toggle-btn" id="volt-220" onclick="setVolt(220, this)">⚡ 220V</button>
       </div>
 
-      <!-- 恢復報價體系 -->
       <div class="section-title" data-zh="報價體系 (未稅)" data-en="Pricing System">報價體系 (未稅)</div>
       <div class="toggle-row">
         <button class="toggle-btn active-green" id="price-dealer" onclick="setPriceType('dealer', this)">📦 經銷價</button>
@@ -330,7 +342,6 @@ header {
   </section>
 </main>
 
-<!-- PDF 報表模板 -->
 <div class="print-sheet" id="printSheet">
   <div class="ps-page">
     <div class="ps-header">
@@ -385,7 +396,6 @@ header {
 </div>
 
 <script>
-// ── 產品資料庫 (補回報價) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB 系列', en: 'Indoor COB Series' }, 
@@ -448,6 +458,7 @@ window.onload = () => {
 
 function init() {
   const wrap = document.getElementById('cvsWrap');
+  if(!wrap) return;
   canvas.width = wrap.clientWidth; canvas.height = wrap.clientHeight;
   update();
 }
@@ -511,8 +522,8 @@ function update() {
   const diag = (Math.sqrt(actW**2 + actH**2) / 0.0254).toFixed(0);
   const pMax = Math.round((actW * actH) * m.max);
   const amp = (pMax / state.volt).toFixed(1);
+  const wallW = parseFloat(document.getElementById('wallW').value) || 6, wallH = parseFloat(document.getElementById('wallH').value) || 3.5;
 
-  // 報價運算
   let priceStr = "詢價中";
   let unitPriceStr = "-";
   if (m.price) {
@@ -539,8 +550,8 @@ function update() {
   document.getElementById('sp-unitPrice').innerText = unitPriceStr;
   document.getElementById('infoBox').innerText = s.info[state.lang];
 
-  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, diag, priceStr, unitPriceStr };
-  draw(actW, actH, 6.0, 3.5, nW, nH, resW, resH, m.name);
+  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, diag, priceStr, unitPriceStr, wallW, wallH };
+  draw(actW, actH, wallW, wallH, nW, nH, resW, resH, m.name);
 }
 
 function drawDim(x1, y1, x2, y2, txt, color, isVert) {
@@ -612,7 +623,7 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
     ctx.fillRect(sx+sw/2-80, sy+sh/2-25, 160, 50);
     ctx.fillStyle='#fff'; ctx.textAlign="center"; ctx.font="bold 16px Segoe UI";
     ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx+sw/2, sy+sh/2);
-    ctx.font="10px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
+    ctx.font="11px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
     const modLbl = state.lang === 'zh' ? '模組' : 'Modules';
     ctx.fillText(`${mName} · ${nW}×${nH} ${modLbl}`, sx+sw/2, sy+sh/2+16);
   }
