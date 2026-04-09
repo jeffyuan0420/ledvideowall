@@ -83,7 +83,6 @@ header {
   text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px;
 }
 
-/* Series Tabs */
 .series-tabs {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 6px; margin-bottom: 22px;
@@ -98,7 +97,6 @@ header {
 .series-btn.active { background: var(--accent); color: #fff; }
 .series-btn .dot { display: block; width: 14px; height: 14px; border-radius: 50%; margin: 0 auto 5px; border: 1.5px solid rgba(255,255,255,0.2); }
 
-/* Pitch Grid */
 .pitch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
 .pitch-card {
   border: 1.5px solid var(--border); border-radius: 12px;
@@ -110,7 +108,6 @@ header {
 .pitch-card.active .pitch-name { color: #ff5566; }
 .pitch-meta { font-size: 9px; color: var(--muted); line-height: 1.5; }
 
-/* Input Fields */
 .field-group { margin-bottom: 15px; }
 .field-label { font-size: 12px; color: #a0adc4; font-weight: 600; margin-bottom: 6px; display: block; }
 .field-input {
@@ -134,7 +131,6 @@ header {
 .ratio-btn:hover { border-color: var(--muted); color: #fff; }
 .ratio-btn.active { border-color: var(--accent); background: var(--accent-dim); color: #fff; }
 
-/* Voltage / Price Toggle */
 .toggle-row { display: flex; gap: 8px; margin-bottom: 22px; }
 .toggle-btn {
   flex: 1; padding: 10px; border: 1.5px solid var(--border);
@@ -144,7 +140,6 @@ header {
 .toggle-btn.active-yellow { border-color: var(--yellow); background: rgba(245,200,66,0.1); color: var(--yellow); }
 .toggle-btn.active-green { border-color: var(--green); background: rgba(16, 185, 129, 0.1); color: var(--green); }
 
-/* Spec Table */
 .spec-mini { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
 .spec-mini td { padding: 9px 5px; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .spec-mini td:first-child { color: var(--muted); }
@@ -160,12 +155,14 @@ header {
 .canvas-wrap { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 #mainCanvas { display: block; }
 
-.upload-btn-wrap { position: absolute; top: 20px; right: 20px; z-index: 10; }
+.upload-btn-wrap { position: absolute; top: 20px; right: 20px; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
 .upload-btn {
   padding: 8px 16px; border-radius: 10px; background: rgba(20,24,36,0.85);
   border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 12px; cursor: pointer; backdrop-filter: blur(10px);
+  display: flex; align-items: center; gap: 6px;
 }
-.upload-hint { font-size: 10px; color: var(--muted); margin-top: 5px; text-align: right; display: block; }
+.upload-btn:hover { background: rgba(40,50,80,0.9); border-color: var(--blue); }
+.upload-hint { font-size: 10px; color: var(--muted); margin-top: 2px; text-align: right; display: block; }
 
 .results-bar { background: var(--panel); border-top: 1px solid var(--border); padding: 18px 24px; display: grid; grid-template-columns: repeat(7, 1fr); }
 .res-item { text-align: center; border-right: 1px solid var(--border); padding: 0 8px; }
@@ -279,17 +276,10 @@ header {
         <button class="ratio-btn" onclick="applyRatio(9/16, this)">9:16</button>
       </div>
 
-      <!-- 找回：場域牆壁實際尺寸 -->
       <div class="section-title" data-zh="📐 場域牆壁實際尺寸" data-en="📐 Wall Dimensions">📐 場域牆壁實際尺寸</div>
       <div class="field-group" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-        <div class="field-input">
-          <input type="number" id="wallW" value="6.0" step="0.1" oninput="update()">
-          <div class="field-unit">W m</div>
-        </div>
-        <div class="field-input">
-          <input type="number" id="wallH" value="3.5" step="0.1" oninput="update()">
-          <div class="field-unit">H m</div>
-        </div>
+        <div class="field-input"><input type="number" id="wallW" value="6.0" oninput="update()"><div class="field-unit">W m</div></div>
+        <div class="field-input"><input type="number" id="wallH" value="3.5" oninput="update()"><div class="field-unit">H m</div></div>
       </div>
 
       <div class="section-title" data-zh="供電電壓" data-en="Power Supply">供電電壓</div>
@@ -322,11 +312,19 @@ header {
     <div class="canvas-wrap" id="cvsWrap">
       <canvas id="mainCanvas"></canvas>
       <div class="upload-btn-wrap">
-        <button class="upload-btn" onclick="document.getElementById('fileIn').click()">
-          📷 <span data-zh="上傳現場牆面圖" data-en="Upload Wall Photo">上傳現場牆面圖</span>
-        </button>
-        <small class="upload-hint" data-zh="※ 拍照時請讓牆面充滿畫面" data-en="* Fill the frame with the wall"></small>
-        <input type="file" id="fileIn" hidden accept="image/*" onchange="loadBg(this)">
+        <div>
+          <button class="upload-btn" onclick="document.getElementById('fileInBg').click()">
+            🏠 <span data-zh="上傳現場牆面圖" data-en="Upload Wall">上傳現場牆面圖</span>
+          </button>
+          <input type="file" id="fileInBg" hidden accept="image/*" onchange="loadPhoto(this, 'bg')">
+        </div>
+        <div>
+          <button class="upload-btn" style="border-color:var(--accent)" onclick="document.getElementById('fileInScreen').click()">
+            📺 <span data-zh="上傳螢幕內容圖" data-en="Upload Content">上傳螢幕內容圖</span>
+          </button>
+          <input type="file" id="fileInScreen" hidden accept="image/*" onchange="loadPhoto(this, 'screen')">
+        </div>
+        <small class="upload-hint" data-zh="※ 牆面圖請充滿鏡頭拍照" data-en="* Fill frame for wall photo"></small>
       </div>
     </div>
 
@@ -342,6 +340,7 @@ header {
   </section>
 </main>
 
+<!-- PDF 報表模板 -->
 <div class="print-sheet" id="printSheet">
   <div class="ps-page">
     <div class="ps-header">
@@ -437,18 +436,20 @@ const DB = {
 let state = { 
   lang: 'zh', series: 'indoor_cob', modelIdx: 0, volt: 110, priceType: 'dealer',
   bgImg: null, isBgLoaded: false, 
-  screenStarImg: null, isScreenStarLoaded: false,
+  screenCustomImg: null, isScreenCustomLoaded: false, // 使用者上傳的螢幕圖
+  screenDefaultImg: null, isScreenDefaultLoaded: false, // 預設星空圖
   personImg: null, isPersonLoaded: false 
 };
 
 const canvas = document.getElementById('mainCanvas'), ctx = canvas.getContext('2d');
 let lastCalc = {};
 
-const SCREEN_BG_URL = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
-const screenBg = new Image();
-screenBg.crossOrigin = "anonymous";
-screenBg.src = SCREEN_BG_URL;
-screenBg.onload = () => { state.screenStarImg = screenBg; state.isScreenStarLoaded = true; update(); };
+// 預載預設螢幕星空圖
+const DEFAULT_SCREEN_URL = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
+const screenDef = new Image();
+screenDef.crossOrigin = "anonymous";
+screenDef.src = DEFAULT_SCREEN_URL;
+screenDef.onload = () => { state.screenDefaultImg = screenDef; state.isScreenDefaultLoaded = true; update(); };
 
 window.onload = () => {
   init(); window.onresize = init;
@@ -488,13 +489,6 @@ function selectSeries(key, btn) {
   update();
 }
 
-function applyRatio(r, btn) {
-  const w = parseFloat(document.getElementById('inW').value);
-  document.getElementById('inH').value = (w / r).toFixed(2);
-  document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-  update();
-}
-
 function setVolt(v, btn) {
   state.volt = v; 
   document.getElementById('volt-110').classList.remove('active-yellow');
@@ -524,7 +518,7 @@ function update() {
   const amp = (pMax / state.volt).toFixed(1);
   const wallW = parseFloat(document.getElementById('wallW').value) || 6, wallH = parseFloat(document.getElementById('wallH').value) || 3.5;
 
-  let priceStr = "詢價中";
+  let priceStr = state.lang === 'zh' ? "詢價中" : "Inquiry";
   let unitPriceStr = "-";
   if (m.price) {
     const range = m.price[state.priceType];
@@ -574,41 +568,44 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   const margin = 100, scale = Math.min((W - margin*2)/wallW, (H - margin*2)/wallH);
   const dw = wallW * scale, dh = wallH * scale, ox = (W-dw)/2, oy = (H-dh)/2;
 
-  ctx.fillStyle = '#1a1d26'; 
-  ctx.fillRect(ox, oy, dw, dh);
-
+  // 1. 牆面
+  ctx.fillStyle = '#1a1d26'; ctx.fillRect(ox, oy, dw, dh);
   if (state.bgImg && state.isBgLoaded) {
     ctx.drawImage(state.bgImg, ox, oy, dw, dh);
-    ctx.fillStyle = "rgba(0,0,0,0.15)";
-    ctx.fillRect(ox, oy, dw, dh);
+    ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(ox, oy, dw, dh);
   }
 
   const wallLabel = state.lang === 'zh' ? '牆壁' : 'Wall';
   drawDim(ox, oy-25, ox+dw, oy-25, `${wallLabel} ${wallW.toFixed(1)} m`, '#4a9eff', false);
   drawDim(ox+dw+25, oy, ox+dw+25, oy+dh, `${wallLabel} ${wallH.toFixed(1)} m`, '#4a9eff', true);
 
+  // 2. 螢幕
   const sw = actW * scale, sh = actH * scale, sx = ox+(dw-sw)/2, sy = oy+(dh-sh)/2;
-  
   ctx.save(); 
-  ctx.beginPath(); 
-  ctx.rect(sx, sy, sw, sh); 
-  ctx.clip();
-  
+  ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip();
   ctx.fillStyle = '#000'; ctx.fillRect(sx, sy, sw, sh);
-  if (state.screenStarImg && state.isScreenStarLoaded) {
-    const imgAR = state.screenStarImg.width / state.screenStarImg.height;
+
+  // 決定繪製內容（自定義圖優先）
+  const activeScreenImg = state.isScreenCustomLoaded ? state.screenCustomImg : (state.isScreenDefaultLoaded ? state.screenDefaultImg : null);
+  
+  if (activeScreenImg) {
+    const imgAR = activeScreenImg.width / activeScreenImg.height;
     const scrAR = sw / sh;
     let drawW, drawH;
     if (imgAR > scrAR) { drawH = sh; drawW = sh * imgAR; } else { drawW = sw; drawH = sw / imgAR; }
-    ctx.drawImage(state.screenStarImg, sx + (sw - drawW) / 2, sy + (sh - drawH) / 2, drawW, drawH);
+    ctx.drawImage(activeScreenImg, sx + (sw - drawW) / 2, sy + (sh - drawH) / 2, drawW, drawH);
     ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(sx, sy, sw, sh);
   }
-  
-  ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 0.5;
-  for(let i=1; i<nW; i++) { let lx=sx+i*sw/nW; ctx.beginPath(); ctx.moveTo(lx,sy); ctx.lineTo(lx,sy+sh); ctx.stroke(); }
-  for(let j=1; j<nH; j++) { let ly=sy+j*sh/nH; ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx+sw,ly); ctx.stroke(); }
+
+  // 3. 模組格線 (僅在沒有上傳內容圖時顯示)
+  if (!state.isScreenCustomLoaded) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)'; ctx.lineWidth = 0.5;
+    for(let i=1; i<nW; i++) { let lx=sx+i*sw/nW; ctx.beginPath(); ctx.moveTo(lx,sy); ctx.lineTo(lx,sy+sh); ctx.stroke(); }
+    for(let j=1; j<nH; j++) { let ly=sy+j*sh/nH; ctx.beginPath(); ctx.moveTo(sx,ly); ctx.lineTo(sx+sw,ly); ctx.stroke(); }
+  }
   ctx.restore();
 
+  // 4. 邊框與標註
   ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.strokeRect(sx, sy, sw, sh);
   drawDim(sx, sy+sh+25, sx+sw, sy+sh+25, `${actW.toFixed(2)} m`, '#fff', false);
   drawDim(sx-25, sy, sx-25, sy+sh, `${actH.toFixed(2)} m`, '#fff', true);
@@ -618,16 +615,17 @@ function draw(actW, actH, wallW, wallH, nW, nH, resW, resH, mName) {
   ctx.fill(); ctx.fillStyle='#fff'; ctx.font="bold 11px Segoe UI"; ctx.textAlign="center"; 
   ctx.fillText(`${nW*nH} ${state.lang==='zh'?'片':'pcs'}`, sx+sw-bw/2-5, sy+20);
 
-  if(sw > 120) {
+  if(sw > 120 && !state.isScreenCustomLoaded) {
     ctx.fillStyle = 'rgba(0,0,0,0.65)';
     ctx.fillRect(sx+sw/2-80, sy+sh/2-25, 160, 50);
     ctx.fillStyle='#fff'; ctx.textAlign="center"; ctx.font="bold 16px Segoe UI";
     ctx.fillText(`${resW.toLocaleString()} × ${resH.toLocaleString()} px`, sx+sw/2, sy+sh/2);
-    ctx.font="11px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
+    ctx.font="10px Segoe UI"; ctx.fillStyle="rgba(255,255,255,0.75)";
     const modLbl = state.lang === 'zh' ? '模組' : 'Modules';
     ctx.fillText(`${mName} · ${nW}×${nH} ${modLbl}`, sx+sw/2, sy+sh/2+16);
   }
 
+  // 5. 人物
   if (state.isPersonLoaded) {
     const ph = 1.78 * scale, pw = ph * (state.personImg.width/state.personImg.height);
     ctx.drawImage(state.personImg, sx-95-pw/2, oy+dh-ph, pw, ph);
@@ -640,9 +638,7 @@ function changeLang(l, btn) {
   state.lang = l;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('[data-zh]').forEach(el => {
-    el.innerText = el.getAttribute('data-' + l);
-  });
+  document.querySelectorAll('[data-zh]').forEach(el => el.innerText = el.getAttribute('data-' + l));
   selectSeries(state.series, document.querySelector(`[data-series="${state.series}"]`));
 }
 
@@ -665,12 +661,32 @@ function exportPDF() {
     <div class="ps-res-card"><div class="ps-rv">${d.resW.toLocaleString()}×${d.resH.toLocaleString()}</div><div class="ps-rl">${l==='zh'?'畫面解析度':'Resolution'}</div></div>
     <div class="ps-res-card"><div class="ps-rv">${d.diag}"</div><div class="ps-rl">${l==='zh'?'對角線':'Diagonal'}</div></div>
     <div class="ps-res-card"><div class="ps-rv">${d.actW.toFixed(2)}×${d.actH.toFixed(2)} m</div><div class="ps-rl">${l==='zh'?'實際尺寸':'Actual Size'}</div></div>
-    <div class="ps-res-card accent" style="background:#f0fff4"><div class="ps-rv" style="color:#10b981">${d.priceStr} 萬</div><div class="ps-rl">${l==='zh'?'初步報價(未稅)':'Est. Price'}</div></div>
+    <div class="ps-res-card accent" style="background:#f0fff4"><div class="ps-rv" style="color:#10b981">${d.priceStr} ${l==='zh'?'萬':'10k'}</div><div class="ps-rl">${l==='zh'?'初步報價(未稅)':'Est. Price'}</div></div>
   `;
   window.print();
 }
 
-function loadBg(input) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { const img = new Image(); img.onload = () => { state.bgImg = img; state.isBgLoaded = true; update(); }; img.src = e.target.result; }; r.readAsDataURL(input.files[0]); } }
+function loadPhoto(input, type) {
+  if (input.files && input.files[0]) {
+    const r = new FileReader();
+    r.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        if (type === 'bg') {
+          state.bgImg = img;
+          state.isBgLoaded = true;
+        } else {
+          state.screenCustomImg = img;
+          state.isScreenCustomLoaded = true;
+        }
+        update();
+      };
+      img.src = e.target.result;
+    };
+    r.readAsDataURL(input.files[0]);
+  }
+}
+
 function openContact() { document.getElementById('contactModal').classList.add('open'); }
 function closeContact() { document.getElementById('contactModal').classList.remove('open'); }
 </script>
