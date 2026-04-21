@@ -57,7 +57,6 @@ header {
 .btn-line { background: var(--line-green); }
 .btn-pdf { background: #1c2231; border: 1px solid var(--border); }
 .btn-primary { background: var(--accent); }
-.btn-primary:hover { filter: brightness(1.2); }
 
 .lang-toggle { display: flex; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .lang-btn { padding: 4px 10px; border: none; background: transparent; color: var(--muted); font-size: 11px; cursor: pointer; }
@@ -81,7 +80,7 @@ header {
 .series-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 4px; border: 1px solid var(--border); }
 .series-btn { padding: 10px 2px; border: none; background: transparent; color: #8a96b0; border-radius: 7px; cursor: pointer; font-size: 11px; font-weight: 600; text-align: center; }
 .series-btn.active { background: var(--accent); color: #fff; }
-.series-btn .dot { display: block; width: 12px; height: 12px; border-radius: 50%; margin: 0 auto 5px; }
+.series-btn .dot { display: block; width: 12px; height: 12px; border-radius: 50%; margin: 0 auto 4px; }
 
 .pitch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
 .pitch-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.2); transition: all 0.2s; }
@@ -103,6 +102,8 @@ header {
 .section-title.wall-title { color: var(--blue); }
 .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
 
+/* 還原：報價體系選擇 */
+.section-title.price-title { color: var(--green); }
 .toggle-row { display: flex; gap: 8px; margin-bottom: 20px; }
 .toggle-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: transparent; color: #8a96b0; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
 .toggle-btn.active-yellow { border-color: var(--yellow); color: var(--yellow); background: rgba(245,200,66,0.1); }
@@ -122,6 +123,7 @@ header {
 .upload-btn-wrap { position: absolute; top: 15px; right: 15px; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
 .upload-btn { padding: 8px 16px; border-radius: 10px; background: rgba(20,24,36,0.85); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 11px; cursor: pointer; backdrop-filter: blur(8px); }
 
+/* 完整 7 欄佈局：含總價與線數 */
 .results-bar { 
   background: var(--panel); border-top: 1px solid var(--border); padding: 15px 20px; 
   display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; flex-shrink: 0;
@@ -169,8 +171,6 @@ header {
   .print-sheet { display: block !important; padding: 0; color: #111; font-family: 'Segoe UI', sans-serif; }
   .ps-page { max-width: 800px; margin: 0 auto; padding: 40px; }
   .ps-header { border-bottom: 3px solid #e3001b; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
-  .ps-title-area h2 { font-size: 24px; color: #000; margin-bottom: 5px; }
-  .ps-section-title { font-size: 14px; font-weight: 800; color: #666; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 15px; margin-top: 30px; }
   .ps-sim-img { width: 100%; max-height: 400px; object-fit: contain; background: #000; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
   .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .ps-row { display: flex; justify-content: space-between; background: #f8f9fa; padding: 10px 15px; border-radius: 6px; font-size: 14px; }
@@ -188,9 +188,6 @@ header {
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; }
 .modal-overlay.open { display: flex; }
 .modal-content { background: #1c2231; border: 1px solid var(--border); border-radius: 16px; width: 450px; max-width: 95vw; padding: 25px; position: relative; }
-.modal-title { font-size: 18px; font-weight: 800; margin-bottom: 15px; }
-.form-input { width: 100%; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; padding: 12px; margin-bottom: 12px; outline: none; }
-.form-input:focus { border-color: var(--accent); }
 .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #888; font-size: 20px; cursor: pointer; }
 </style>
 </head>
@@ -249,7 +246,7 @@ header {
         <div class="field-input"><input type="number" id="wallH" value="3.5" oninput="update()"><div class="field-unit">H</div></div>
       </div>
 
-      <div class="section-title" data-zh="報價體系 (未稅)" data-en="Pricing System">報價體系 (未稅)</div>
+      <div class="section-title price-title" data-zh="報價體系 (未稅)" data-en="Pricing System">報價體系 (未稅)</div>
       <div class="toggle-row">
         <button class="toggle-btn active-green" id="price-dealer" onclick="setPriceType('dealer', this)">經銷價</button>
         <button class="toggle-btn" id="price-direct" onclick="setPriceType('direct', this)">直銷價</button>
@@ -261,13 +258,12 @@ header {
         <button class="toggle-btn" id="volt-220" onclick="setVolt(220, this)">220V</button>
       </div>
 
-      <div class="section-title" data-zh="規格詳情" data-en="Specs">規格詳情</div>
+      <div class="section-title" data-zh="工程詳情" data-en="Engineering">工程詳情</div>
       <table class="spec-mini">
-        <tr><td data-zh="系列" data-en="Series">系列</td><td id="sp-series">-</td></tr>
-        <tr><td data-zh="像素間距" data-en="Pitch">像素間距</td><td id="sp-pitch">-</td></tr>
         <tr><td data-zh="模組尺寸" data-en="Module">模組尺寸</td><td id="sp-modSize">-</td></tr>
-        <tr><td data-zh="最大電流" data-en="Current">最大電流</td><td id="sp-amp">-</td></tr>
-        <tr style="background:rgba(16,185,129,0.1)"><td data-zh="預估單價" data-en="Unit Price">預估單價</td><td id="sp-unitPrice" style="color:var(--green)">-</td></tr>
+        <tr><td data-zh="總像素點數" data-en="Total Pixels">總像素點數</td><td id="sp-totalPixels" style="color:var(--yellow)">-</td></tr>
+        <tr><td data-zh="預估單價" data-en="Unit Price">預估單價</td><td id="sp-unitPrice" style="color:var(--green)">-</td></tr>
+        <tr style="background:rgba(74,158,255,0.08)"><td style="color:var(--blue); font-weight:700" data-zh="網路線需求" data-en="Cables">網路線需求</td><td id="sp-cables" style="color:var(--blue)">-</td></tr>
       </table>
       <div class="info-box" id="infoBox"></div>
     </div>
@@ -290,8 +286,8 @@ header {
       <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl">解析度</span></div>
       <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl">實際尺寸</span></div>
       <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl">對角線</span></div>
-      <div class="res-item"><span class="res-val green" id="res-estPrice">-</span><span class="res-lbl">初步總價</span></div>
-      <div class="res-item"><span class="res-val" id="res-dist">-</span><span class="res-lbl">觀賞距離</span></div>
+      <div class="res-item"><span class="res-val green" id="res-price">-</span><span class="res-lbl">初步報價</span></div>
+      <div class="res-item"><span class="res-val" id="res-cables">-</span><span class="res-lbl">網路線數</span></div>
     </div>
   </section>
 </main>
@@ -305,22 +301,22 @@ header {
       </div>
       <div class="ps-title-area" style="text-align: right;">
         <h2>產品規格配置報表</h2>
-        <p id="ps-date" style="font-size: 12px; color: #888;">報告日期：-</p>
+        <p id="ps-date">報告日期：-</p>
       </div>
     </div>
     <div class="ps-section"><div class="ps-section-title">現場環境合成示意圖</div><img id="ps-sim-img" class="ps-sim-img" src=""></div>
     <div class="ps-grid">
       <div class="ps-col">
-        <div class="ps-section-title">產品基礎規格</div>
+        <div class="ps-section-title">基礎參數</div>
         <div class="ps-row"><span>產品系列</span><span class="ps-val" id="ps-series-print">-</span></div>
         <div class="ps-row"><span>像素間距</span><span class="ps-val" id="ps-pitch-print">-</span></div>
         <div class="ps-row"><span>模組尺寸</span><span class="ps-val" id="ps-modsize-print">-</span></div>
       </div>
       <div class="ps-col">
-        <div class="ps-section-title">環境配置參數</div>
-        <div class="ps-row"><span>牆面寬度</span><span class="ps-val" id="ps-wallw-print">-</span></div>
-        <div class="ps-row"><span>牆面高度</span><span class="ps-val" id="ps-wallh-print">-</span></div>
-        <div class="ps-row"><span>電壓環境</span><span class="ps-val" id="ps-volt-print">-</span></div>
+        <div class="ps-section-title">工程預留</div>
+        <div class="ps-row"><span>螢幕總像素</span><span class="ps-val" id="ps-totalpix-print">-</span></div>
+        <div class="ps-row"><span>預估路數</span><span class="ps-val" id="ps-cables-print">-</span></div>
+        <div class="ps-row"><span>供電電壓</span><span class="ps-val" id="ps-volt-print">-</span></div>
       </div>
     </div>
     <div class="ps-section-title">配置計算結果</div>
@@ -329,12 +325,12 @@ header {
       <div class="ps-res-card accent"><div class="ps-rv" id="ps-res-total">-</div><div class="ps-rl">模組總數</div></div>
       <div class="ps-res-card"><div class="ps-rv" id="ps-res-res">-</div><div class="ps-rl">畫面解析度</div></div>
       <div class="ps-res-card"><div class="ps-rv" id="ps-res-size">-</div><div class="ps-rl">實際尺寸</div></div>
-      <div class="ps-res-card"><div class="ps-rv" id="ps-res-diag">-</div><div class="ps-rl">對角線</div></div>
-      <div class="ps-res-card accent" style="background:#f0fff4"><div class="ps-rv" id="ps-res-price" style="color:#10b981">-</div><div class="ps-rl">初步總價</div></div>
+      <div class="ps-res-card accent" style="background:#f0fff4"><div class="ps-rv" id="ps-res-price" style="color:#10b981">-</div><div class="ps-rl">初步總價預估</div></div>
+      <div class="ps-res-card"><div class="ps-rv" id="ps-res-cables" style="color:#007aff">-</div><div class="ps-rl">建議網路線數</div></div>
     </div>
     <div class="ps-footer">
       <div>盛源精密工業股份有限公司 PERSONA<br>☎ 02-2290-0882 | 💬 LINE：@touchpersona</div>
-      <div style="text-align: right;">※ 本報價皆為未稅價，包含基本安裝施工。實際規格以合約為準。</div>
+      <div style="text-align: right;">※ 本報價皆為未稅價，包含基本安裝施工。單條網路線支援約 65 萬點。</div>
     </div>
   </div>
 </div>
@@ -343,29 +339,25 @@ header {
   <div class="modal-content">
     <button class="modal-close" onclick="closeContact()">✕</button>
     <div style="font-size:18px; font-weight:800; margin-bottom:15px">✉ 聯繫盛源 PERSONA</div>
-    <input type="text" class="form-input" id="c-name" placeholder="您的姓名 *">
-    <input type="tel" class="form-input" id="c-tel" placeholder="聯絡電話 *">
-    <textarea class="form-input" id="c-msg" placeholder="請填寫您的需求（例如：安裝地區、預算等）" style="height:100px"></textarea>
-    <button class="hdr-btn btn-primary" style="width:100%; justify-content:center" onclick="alert('已收到您的需求，專員將盡快聯繫您！')">提交諮詢</button>
+    <input type="text" class="form-input" placeholder="姓名 *">
+    <input type="tel" class="form-input" placeholder="電話 *">
+    <textarea class="form-input" placeholder="您的需求..." style="height:100px; width:100%; background:#000; border:1px solid var(--border); border-radius:8px; color:#fff; padding:12px; outline:none;"></textarea>
+    <button class="hdr-btn btn-primary" style="width:100%; justify-content:center; margin-top:10px" onclick="alert('已收到需求！')">確認送出</button>
   </div>
 </div>
 
 <script>
-// ── 產品資料庫 (移除 P1.86(S)，僅保留 P1.86(G)) ──
+// ── 產品報價矩陣 (根據截圖 image_25d77e.jpg 精確校對) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370,
     info: { zh: '💡 COB 技術：表面平整，防塵防潮，適合近距離觀看。', en: '💡 COB Tech: Smooth surface, moisture proof.' },
-    models: [
-      { name: 'P1.53(C)', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2500, 2800], direct: [3500, 3800] } }
-    ]
+    models: [{ name: 'P1.53(C)', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2500, 2800], direct: [3500, 3800] } }]
   },
   indoor_cob_pro: { 
     name: { zh: '室內 GOB', en: 'Indoor GOB' }, modW: 320, modH: 160, max: 439,
-    info: { zh: '💡 GOB 技術：針對表面增加保護塗層，提升防撞與抗氧化能力。', en: '💡 GOB Tech: Enhanced surface protection.' },
-    models: [
-      { name: 'P1.86(G)', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [1800, 1900], direct: [2400, 2600] } }
-    ]
+    info: { zh: '💡 GOB 技術：針對表面增加保護塗層，提升防撞能力。', en: '💡 GOB Tech: Enhanced surface protection.' },
+    models: [{ name: 'P1.86(G)', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [1800, 1900], direct: [2400, 2600] } }]
   }
 };
 
@@ -409,7 +401,13 @@ function selectSeries(key, btn) {
   update();
 }
 
-function setPriceType(type, btn) { state.priceType = type; document.querySelectorAll('#price-dealer, #price-direct').forEach(b => b.classList.remove('active-green')); btn.classList.add('active-green'); update(); }
+function setPriceType(type, btn) {
+  state.priceType = type;
+  document.querySelectorAll('#price-dealer, #price-direct').forEach(b => b.classList.remove('active-green'));
+  btn.classList.add('active-green');
+  update();
+}
+
 function setVolt(v, btn) { state.volt = v; document.querySelectorAll('#volt-110, #volt-220').forEach(b => b.classList.remove('active-yellow')); btn.classList.add('active-yellow'); update(); }
 
 function update() {
@@ -417,11 +415,15 @@ function update() {
   if(!m) return;
   const reqW = parseFloat(document.getElementById('inW').value) || 3, reqH = parseFloat(document.getElementById('inH').value) || 2;
   const nW = Math.max(1, Math.round(reqW * 1000 / s.modW)), nH = Math.max(1, Math.round(reqH * 1000 / s.modH));
-  const actW = nW * s.modW / 1000, actH = nH * s.modH / 1000;
-  const resW = nW * (m.mW||0), resH = nH * (m.mH||0);
   const totalMods = nW * nH;
-  const amp = (Math.round(actW * actH * (m.max||0)) / state.volt).toFixed(1);
+  const actW = nW * s.modW / 1000, actH = nH * s.modH / 1000;
+  const resW = nW * m.mW, resH = nH * m.mH;
+  const totalPixels = resW * resH;
 
+  // 工程計算邏輯：總點數 / 65萬，無條件進位
+  const cables = Math.ceil(totalPixels / 650000);
+
+  // 報價計算邏輯
   let priceStr = "詢價", unitPrice = "-";
   if(m.price) {
     const r = m.price[state.priceType];
@@ -434,17 +436,17 @@ function update() {
   updateText('res-resolution', `${resW.toLocaleString()}×${resH.toLocaleString()} px`);
   updateText('res-size', `${actW.toFixed(2)}×${actH.toFixed(2)}m`);
   updateText('res-diag', (Math.sqrt(actW**2 + actH**2)/0.0254).toFixed(0) + '"');
-  updateText('res-dist', `≥ ${m.pitch}m`);
-  updateText('res-estPrice', priceStr);
-  updateText('sp-series', s.name[state.lang]);
-  updateText('sp-pitch', `${m.pitch}mm`);
+  updateText('res-price', priceStr);
+  updateText('res-cables', `${cables} 條`);
+
   updateText('sp-modSize', `${s.modW}×${s.modH}mm`);
-  updateText('sp-amp', `${amp}A (${state.volt}V)`);
+  updateText('sp-totalPixels', `${totalPixels.toLocaleString()} 點`);
   updateText('sp-unitPrice', unitPrice);
+  updateText('sp-cables', `${cables} 條 (Cat.6)`);
   updateText('infoBox', s.info[state.lang]);
 
   const wallW = parseFloat(document.getElementById('wallW').value)||6, wallH = parseFloat(document.getElementById('wallH').value)||3.5;
-  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, amp, priceStr, unitPrice, wallW, wallH, volt: state.volt };
+  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, totalPixels, cables, wallW, wallH, volt: state.volt, priceStr, unitPrice };
   draw(actW, actH, wallW, wallH, nW, nH);
 }
 
@@ -471,10 +473,6 @@ function draw(actW, actH, wallW, wallH, nW, nH) {
   if (state.isPersonLoaded && state.personImg) {
     const pw = ph * (state.personImg.width/state.personImg.height);
     ctx.drawImage(state.personImg, px - pw/2, py - ph, pw, ph);
-  } else {
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.beginPath(); ctx.arc(px, py - ph*0.9, Math.max(1, Math.abs(ph*0.06)), 0, Math.PI*2); ctx.fill();
-    ctx.fillRect(px - ph*0.08, py - ph*0.82, ph*0.16, ph*0.4);
   }
   ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center'; ctx.fillText("178cm / 5'10\"", px, py + 15);
 }
@@ -484,21 +482,23 @@ function applyRatio(r, btn) { document.getElementById('inH').value = (parseFloat
 function loadPhoto(input, type) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { const img = new Image(); img.onload = () => { if (type === 'bg') state.bgImg = img; else state.screenImg = img; update(); }; img.src = e.target.result; }; r.readAsDataURL(input.files[0]); } }
 function openContact() { document.getElementById('contactModal').classList.add('open'); }
 function closeContact() { document.getElementById('contactModal').classList.remove('open'); }
+
 function exportPDF() {
-  const d = lastCalc, now = new Date(); if(!d.m) return;
+  const d = lastCalc, now = new Date(); if(!d.s) return;
   updateText('ps-date', `報告日期：${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}`);
   updateText('ps-series-print', d.s.name.zh);
   updateText('ps-pitch-print', `${d.m.pitch} mm`);
   updateText('ps-modsize-print', `${d.s.modW} × ${d.s.modH} mm`);
-  updateText('ps-wallw-print', `${d.wallW} m`);
-  updateText('ps-wallh-print', `${d.wallH} m`);
+  updateText('ps-totalpix-print', `${d.totalPixels.toLocaleString()} px`);
+  updateText('ps-cables-print', `${d.cables} 條`);
   updateText('ps-volt-print', `${d.volt} V`);
   updateText('ps-res-mods', `${d.nW} × ${d.nH}`);
-  updateText('ps-res-total', `${d.totalMods} 片`);
-  updateText('ps-res-res', `${d.resW.toLocaleString()} × ${resH.toLocaleString()} px`);
+  updateText('ps-res-total', `${totalMods} 片`);
+  updateText('ps-res-res', `${d.resW.toLocaleString()} × ${d.resH.toLocaleString()} px`);
   updateText('ps-res-size', `${d.actW.toFixed(2)} × ${actH.toFixed(2)} m`);
   updateText('ps-res-diag', `${d.diag}"`);
   updateText('ps-res-price', d.priceStr);
+  updateText('ps-res-cables', `${d.cables} 條`);
   document.getElementById('ps-sim-img').src = canvas.toDataURL('image/png');
   window.print();
 }
