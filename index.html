@@ -5,14 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>LED 電視牆配置計算器 Pro | 盛源 PERSONA</title>
 
-<!-- PWA / Mobile Meta Tags -->
 <meta name="theme-color" content="#0b0d12">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LED 計算器 Pro">
 <link rel="apple-touch-icon" href="logo.png">
 
-<!-- 透過 Data URI 植入 Manifest，確保 PWA 特性在部署後可運作 -->
 <link rel="manifest" href='data:application/manifest+json,{"name":"LED 電視牆配置計算器 Pro","short_name":"LED計算器","start_url":".","display":"standalone","background_color":"#0b0d12","theme_color":"#0b0d12","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png"}]}'>
 
 <style>
@@ -106,6 +104,7 @@ header {
 .field-input { display: flex; align-items: center; background: rgba(0,0,0,0.3); border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
 .field-input input { flex: 1; background: transparent; border: none; outline: none; color: #fff; padding: 10px; font-size: 18px; font-weight: 700; width: 100%; }
 .field-unit { padding: 0 10px; font-size: 12px; color: var(--muted); border-left: 1px solid var(--border); }
+.field-tip { font-size: 10px; color: var(--muted); margin-top: 6px; line-height: 1.4; display: block; }
 
 .ratio-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 18px; }
 .ratio-btn { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: #8a96b0; font-size: 11px; cursor: pointer; transition: 0.2s; }
@@ -114,11 +113,12 @@ header {
 .section-title.wall-title { color: var(--blue); }
 .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
 
-/* 報價體系切換 */
+/* 報價體系 */
 .section-title.price-title { color: var(--green); }
 .toggle-row { display: flex; gap: 8px; margin-bottom: 20px; }
 .toggle-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: transparent; color: #8a96b0; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
 .toggle-btn.active-green { border-color: var(--green); color: var(--green); background: rgba(16, 185, 129, 0.1); }
+.toggle-btn.active-yellow { border-color: var(--yellow); color: var(--yellow); background: rgba(245,200,66,0.1); }
 
 .spec-mini { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 15px; }
 .spec-mini td { padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -242,6 +242,7 @@ header {
       </div>
       <div class="field-group">
         <div class="field-input"><input type="number" id="inH" value="2.14" step="0.1" oninput="handleInput('H')"><div class="field-unit">H m</div></div>
+        <span class="field-tip">※ 實際尺寸會依據 LED 模組整數倍（320x160mm）自動配置最接近數值。</span>
       </div>
       <div class="ratio-row">
         <button class="ratio-btn" onclick="applyRatio(16/9, this)">16:9</button>
@@ -263,11 +264,19 @@ header {
         <button class="toggle-btn" id="price-direct" onclick="setPriceType('direct', this)">直銷價</button>
       </div>
 
+      <div class="section-title" data-zh="供電電壓" data-en="Power Supply">供電電壓</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active-yellow" id="volt-110" onclick="setVolt(110, this)">110V</button>
+        <button class="toggle-btn" id="volt-220" onclick="setVolt(220, this)">220V</button>
+      </div>
+
       <div class="section-title" data-zh="工程詳算" data-en="Engineering">工程詳算</div>
       <table class="spec-mini">
         <tr><td data-zh="建議控制盒" data-en="Controller">建議控制盒</td><td id="sp-ctrl" style="color:var(--yellow)">-</td></tr>
         <tr><td data-zh="總像素點數" data-en="Total Pixels">總像素點數</td><td id="sp-totalPixels">-</td></tr>
         <tr><td data-zh="預估單價" data-en="Unit Price">預估單價</td><td id="sp-unitPrice" style="color:var(--green)">-</td></tr>
+        <tr><td data-zh="最大功耗預估" data-en="Max Power">最大功耗預估</td><td id="sp-power" style="color:var(--yellow)">-</td></tr>
+        <tr><td data-zh="最大電流需求" data-en="Max Current">最大電流需求</td><td id="sp-amp">-</td></tr>
         <tr style="background:rgba(74,158,255,0.08)"><td style="color:var(--blue); font-weight:700" data-zh="建議施工線數" data-en="Practical Cables">建議施工線數</td><td id="sp-cables" style="color:var(--blue)">-</td></tr>
       </table>
       <div class="info-box" id="infoBox"></div>
@@ -318,10 +327,11 @@ header {
         <div class="ps-row"><span>模組尺寸</span><span class="ps-val">320 × 160 mm</span></div>
       </div>
       <div class="ps-col">
-        <div class="ps-section-title">工程預留</div>
+        <div class="ps-section-title">工程與供電預留</div>
         <div class="ps-row"><span>螢幕總像素</span><span class="ps-val" id="ps-totalpix-print">-</span></div>
-        <div class="ps-row"><span>建議控制器</span><span class="ps-val" id="ps-ctrl-print">-</span></div>
-        <div class="ps-row"><span>施工路數</span><span class="ps-val" id="ps-cables-print">-</span></div>
+        <div class="ps-row"><span>最大功耗預估</span><span class="ps-val" id="ps-power-print">-</span></div>
+        <div class="ps-row"><span>最大電流需求</span><span class="ps-val" id="ps-amp-print">-</span></div>
+        <div class="ps-row"><span>建議施工路數</span><span class="ps-val" id="ps-cables-print">-</span></div>
       </div>
     </div>
     <div class="ps-section-title">配置計算結果</div>
@@ -338,22 +348,10 @@ header {
   </div>
 </div>
 
-<div class="modal-overlay" id="contactModal">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeContact()">✕</button>
-    <div style="font-size:18px; font-weight:800; margin-bottom:15px">✉ 聯繫盛源 PERSONA</div>
-    <input type="text" class="form-input" id="c-name" placeholder="姓名 *">
-    <input type="tel" class="form-input" id="c-tel" placeholder="電話 *">
-    <textarea class="form-input" id="c-msg" placeholder="需求詳情..." style="height:100px; width:100%; background:#000; border:1px solid var(--border); border-radius:8px; color:#fff; padding:12px; outline:none;"></textarea>
-    <button class="hdr-btn btn-primary" style="width:100%; justify-content:center; margin-top:10px" onclick="alert('專員將盡快聯繫您！')">提交諮詢</button>
-  </div>
-</div>
-
 <script>
-// ── 數據庫 ──
 const DB = {
   indoor_cob: {
-    name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370,
+    name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370, // max 代表每平方米最大功耗 W/m²
     info: { zh: '💡 COB 技術：表面平整，防塵防潮，適合近距離觀看。', en: '💡 COB Tech.' },
     models: [
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, price: { dealer: [3200, 3300], direct: null } },
@@ -400,13 +398,9 @@ window.onload = () => {
   const pImg = new Image(); pImg.src = "LED計算人物圖.png";
   pImg.onload = () => { state.personImg = pImg; state.isPersonLoaded = true; update(); };
   
-  // 修復：移除 Blob 註冊 Service Worker，改用傳統方式並加上錯誤處理
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      // 在實際部署環境中需有實體 sw.js 檔案
-      navigator.serviceWorker.register('sw.js').catch(err => {
-        // 在預覽環境中忽略找不到 sw.js 的錯誤
-      });
+      navigator.serviceWorker.register('sw.js').catch(err => {});
     });
   }
 };
@@ -434,13 +428,8 @@ function selectSeries(key, btn) {
   update();
 }
 
-function setPriceType(type, btn) { 
-  state.priceType = type; 
-  document.querySelectorAll('#price-dealer, #price-direct').forEach(b => b.classList.remove('active-green')); 
-  btn.classList.add('active-green'); 
-  update(); 
-}
-
+function setPriceType(type, btn) { state.priceType = type; document.querySelectorAll('#price-dealer, #price-direct').forEach(b => b.classList.remove('active-green')); btn.classList.add('active-green'); update(); }
+// 修正：修正電壓切換時的 UI 樣式類別（active-yellow）
 function setVolt(v, btn) { state.volt = v; document.querySelectorAll('#volt-110, #volt-220').forEach(b => b.classList.remove('active-yellow')); btn.classList.add('active-yellow'); update(); }
 
 function handleInput(source) {
@@ -475,11 +464,14 @@ function update() {
   const resW = nW * m.mW, resH = nH * m.mH;
   const totalPixels = resW * resH;
 
-  // 工程實務邏輯：1.2 倍餘裕
   const theoryCables = Math.ceil(totalPixels / 650000);
   const practicalCables = Math.ceil(theoryCables * 1.2);
   const ports = [4, 6, 8, 16];
   let recommendedCtrl = ports.find(p => p >= practicalCables) ? `${ports.find(p => p >= practicalCables)} 埠控制盒` : `${practicalCables} 埠需求 (需多台)`;
+
+  // 核心修復：電量與功耗精算
+  const totalPower_W = Math.round(actW * actH * s.max);
+  const amp = (totalPower_W / state.volt).toFixed(1);
 
   // 報價邏輯
   let priceStr = "專案洽詢", unitPrice = "N/A";
@@ -504,14 +496,18 @@ function update() {
   updateText('res-price', priceStr);
   updateText('res-cables', `${practicalCables} 條`);
 
+  // 將電工數據更新至網頁表格
+  updateText('sp-modSize', `${s.modW}×${s.modH}mm`);
   updateText('sp-totalPixels', `${totalPixels.toLocaleString()} 點`);
   updateText('sp-unitPrice', unitPrice);
+  updateText('sp-power', `${totalPower_W.toLocaleString()} W`);
+  updateText('sp-amp', `${amp} A (${state.volt}V)`);
   updateText('sp-cables', `${practicalCables} 條`);
   updateText('sp-ctrl', recommendedCtrl);
   updateText('infoBox', s.info[state.lang]);
 
   const wallW = parseFloat(document.getElementById('wallW').value)||6, wallH = parseFloat(document.getElementById('wallH').value)||3.5;
-  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, totalPixels, cables: practicalCables, recommendedCtrl, wallW, wallH, volt: state.volt, priceStr, unitPrice };
+  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, totalPixels, cables: practicalCables, recommendedCtrl, wallW, wallH, volt: state.volt, priceStr, unitPrice, totalPower_W, amp };
   draw(actW, actH, wallW, wallH, nW, nH);
 }
 
@@ -552,10 +548,15 @@ function exportPDF() {
   updateText('ps-date', `報告日期：${new Date().toLocaleDateString()}`);
   updateText('ps-series-print', d.s.name.zh);
   updateText('ps-pitch-print', `${d.m.pitch} mm`);
+  updateText('ps-modsize-print', `320 × 160 mm`);
   updateText('ps-totalpix-print', `${d.totalPixels.toLocaleString()} px`);
+  updateText('ps-power-print', `${d.totalPower_W.toLocaleString()} W`);
+  updateText('ps-amp-print', `${d.amp} A`);
   updateText('ps-cables-print', `${d.cables} 條`);
   updateText('ps-ctrl-print', d.recommendedCtrl);
   updateText('ps-volt-print', `${d.volt} V`);
+  updateText('ps-wallw-print', `${d.wallW} m`);
+  updateText('ps-wallh-print', `${d.wallH} m`);
   updateText('ps-res-mods', `${d.nW} × ${d.nH}`);
   updateText('ps-res-total', `${d.totalMods} 片`);
   updateText('ps-res-res', `${d.resW.toLocaleString()} × ${d.resH.toLocaleString()} px`);
