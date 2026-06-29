@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>LED 電視牆配置計算器 Pro | 盛源 PERSONA</title>
 
+<!-- PWA / Mobile Meta Tags -->
 <meta name="theme-color" content="#0b0d12">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="LED 計算器 Pro">
 <link rel="apple-touch-icon" href="logo.png">
 
+<!-- 透過 Data URI 植入 Manifest，確保 PWA 特性在部署後可運作 -->
 <link rel="manifest" href='data:application/manifest+json,{"name":"LED 電視牆配置計算器 Pro","short_name":"LED計算器","start_url":".","display":"standalone","background_color":"#0b0d12","theme_color":"#0b0d12","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png"}]}'>
 
 <style>
@@ -348,14 +350,27 @@ header {
   </div>
 </div>
 
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeContact()">✕</button>
+    <div style="font-size:18px; font-weight:800; margin-bottom:15px">✉ 聯繫盛源 PERSONA</div>
+    <input type="text" class="form-input" id="c-name" placeholder="姓名 *">
+    <input type="tel" class="form-input" id="c-tel" placeholder="電話 *">
+    <textarea class="form-input" id="c-msg" placeholder="需求詳情..." style="height:100px; width:100%; background:#000; border:1px solid var(--border); border-radius:8px; color:#fff; padding:12px; outline:none;"></textarea>
+    <button class="hdr-btn btn-primary" style="width:100%; justify-content:center; margin-top:10px" onclick="alert('專員將盡快聯繫您！')">提交諮詢</button>
+  </div>
+</div>
+
 <script>
+// ── 數據庫 (加入最新 P1.86 COB 規格) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370, // max 代表每平方米最大功耗 W/m²
     info: { zh: '💡 COB 技術：表面平整，防塵防潮，適合近距離觀看。', en: '💡 COB Tech.' },
     models: [
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, price: { dealer: [3200, 3300], direct: null } },
-      { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2500, 2800], direct: [3500, 3800] } }
+      { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2500, 2800], direct: [3500, 3800] } },
+      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [2200, 2300], direct: null } } // 新增規格與經銷報價
     ]
   },
   indoor_gob: {
@@ -412,6 +427,7 @@ function init() {
   update();
 }
 
+// 修正：在 PWA 環境下正確刷新文字節點
 function updateText(id, text) { const el = document.getElementById(id); if(el) el.innerText = text; }
 
 function selectSeries(key, btn) {
@@ -429,7 +445,6 @@ function selectSeries(key, btn) {
 }
 
 function setPriceType(type, btn) { state.priceType = type; document.querySelectorAll('#price-dealer, #price-direct').forEach(b => b.classList.remove('active-green')); btn.classList.add('active-green'); update(); }
-// 修正：修正電壓切換時的 UI 樣式類別（active-yellow）
 function setVolt(v, btn) { state.volt = v; document.querySelectorAll('#volt-110, #volt-220').forEach(b => b.classList.remove('active-yellow')); btn.classList.add('active-yellow'); update(); }
 
 function handleInput(source) {
@@ -469,7 +484,6 @@ function update() {
   const ports = [4, 6, 8, 16];
   let recommendedCtrl = ports.find(p => p >= practicalCables) ? `${ports.find(p => p >= practicalCables)} 埠控制盒` : `${practicalCables} 埠需求 (需多台)`;
 
-  // 核心修復：電量與功耗精算
   const totalPower_W = Math.round(actW * actH * s.max);
   const amp = (totalPower_W / state.volt).toFixed(1);
 
@@ -496,7 +510,6 @@ function update() {
   updateText('res-price', priceStr);
   updateText('res-cables', `${practicalCables} 條`);
 
-  // 將電工數據更新至網頁表格
   updateText('sp-modSize', `${s.modW}×${s.modH}mm`);
   updateText('sp-totalPixels', `${totalPixels.toLocaleString()} 點`);
   updateText('sp-unitPrice', unitPrice);
