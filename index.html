@@ -362,15 +362,15 @@ header {
 </div>
 
 <script>
-// ── 數據庫 (加入最新 P1.86 COB 規格) ──
+// ── 數據庫 (更新最新價格對照) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370, // max 代表每平方米最大功耗 W/m²
     info: { zh: '💡 COB 技術：表面平整，防塵防潮，適合近距離觀看。', en: '💡 COB Tech.' },
     models: [
       { name: 'P1.25', pitch: 1.25, mW: 256, mH: 128, price: { dealer: [3200, 3300], direct: null } },
-      { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2500, 2800], direct: [3500, 3800] } },
-      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [2200, 2300], direct: null } } // 新增規格與經銷報價
+      { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2600, 2800], direct: [3500, 3600] } }, // 已更新經銷與直銷價
+      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [2200, 2300], direct: [2800, 3000] } }  // 已更新直銷價
     ]
   },
   indoor_gob: {
@@ -378,8 +378,8 @@ const DB = {
     info: { zh: '💡 GOB 技術：針對表面增加保護塗層，提升防撞能力。', en: '💡 GOB Tech.' },
     models: [
       { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2350, 2500], direct: null } },
-      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [1800, 1900], direct: [2400, 2600] } },
-      { name: 'P2.0',   pitch: 2.0,  mW: 160, mH: 80, price: { dealer: [1600, 1600], direct: null } },
+      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [1800, 1900], direct: [2400, 2600] } }, // 已更新直銷價
+      { name: 'P2.0',   pitch: 2.0,  mW: 160, mH: 80, price: { dealer: [1600, 1700], direct: [2000, 2100] } }, // 已更新經銷與直銷價
       { name: 'P2.5',   pitch: 2.5,  mW: 128, mH: 64, price: { dealer: [1400, 1400], direct: null } }
     ]
   },
