@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LED 電視牆配置計算器 Pro | 盛源 PERSONA</title>
+
+<!-- PWA / Mobile Meta Tags -->
+<meta name="theme-color" content="#0b0d12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="LED 計算器 Pro">
+<link rel="apple-touch-icon" href="logo.png">
+
+<!-- 透過 Data URI 植入 Manifest，確保 PWA 特性在部署後可運作 -->
+<link rel="manifest" href='data:application/manifest+json,{"name":"LED 電視牆配置計算器 Pro (官網公開版)","short_name":"LED計算器","start_url":".","display":"standalone","background_color":"#0b0d12","theme_color":"#0b0d12","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png"}]}'>
+
+<style>
+:root {
+  --bg: #0b0d12;
+  --panel: #12151f;
+  --card: #181c28;
+  --border: #242a3a;
+  --accent: #e3001b;
+  --accent-dim: rgba(227, 0, 27, 0.15);
+  --text: #e8ecf4;
+  --muted: #8a96b0;
+  --yellow: #f5c842;
+  --blue: #4a9eff;
+  --green: #34d399;
+  --line-green: #06c755;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { 
+  height: 100%; width: 100%;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+  background: var(--bg); color: var(--text); 
+  overflow-x: hidden;
+}
+
+header {
+  background: linear-gradient(90deg, #0f0008 0%, #0b0d12 50%, #000a18 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; position: relative; z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-img { height: 35px; width: auto; display: block; object-fit: contain; }
+.logo-fallback { font-size: 18px; font-weight: 900; color: var(--accent); letter-spacing: 1px; display: none; }
+
+.logo-text { border-left: 1px solid var(--border); padding-left: 10px; margin-left: 5px; }
+.logo-text div:first-child { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
+.logo-text div:last-child { font-size: 9px; color: var(--muted); }
+
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.hdr-btn {
+  padding: 8px 16px; border-radius: 8px; cursor: pointer;
+  font-size: 12px; font-weight: 600; border: none;
+  display: flex; align-items: center; gap: 4px; transition: 0.2s;
+  white-space: nowrap; color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.btn-line { background: var(--line-green); }
+.btn-pdf { background: #1c2231; border: 1px solid var(--border); }
+.btn-primary { background: var(--accent); color: #fff !important; }
+.btn-primary:hover { filter: brightness(1.2); }
+
+.lang-toggle { display: flex; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.lang-btn { padding: 4px 10px; border: none; background: transparent; color: var(--muted); font-size: 11px; cursor: pointer; }
+.lang-btn.active { background: var(--accent); color: #fff; }
+
+.app { display: flex; height: calc(100vh - 60px); width: 100%; transition: flex-direction 0.3s ease; }
+
+.left-panel {
+  width: 320px; flex-shrink: 0;
+  background: var(--panel); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
+}
+.left-scroll { flex: 1; overflow-y: auto; padding: 20px; }
+.left-scroll::-webkit-scrollbar { width: 4px; }
+.left-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+.section-title { font-size: 11px; font-weight: 700; color: #a0adc4; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; margin-top: 5px; }
+
+.series-tabs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 20px; background: rgba(0,0,0,0.25); border-radius: 10px; padding: 4px; border: 1px solid var(--border); }
+.series-btn { padding: 10px 2px; border: none; background: transparent; color: #8a96b0; border-radius: 7px; cursor: pointer; font-size: 11px; font-weight: 600; text-align: center; }
+.series-btn.active { background: var(--accent); color: #fff; }
+.series-btn .dot { display: block; width: 12px; height: 12px; border-radius: 50%; margin: 0 auto 4px; }
+
+.pitch-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+.pitch-card { border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; background: rgba(0,0,0,0.2); transition: all 0.2s; }
+.pitch-card.active { border-color: var(--blue); background: rgba(74, 158, 255, 0.15); box-shadow: inset 0 0 10px rgba(74, 158, 255, 0.1); }
+.pitch-name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+.pitch-card.active .pitch-name { color: var(--blue); }
+.pitch-meta { font-size: 9px; color: var(--muted); }
+
+.field-group { margin-bottom: 14px; }
+.field-label { font-size: 11px; color: #a0adc4; font-weight: 600; margin-bottom: 5px; display: block; }
+.field-input { display: flex; align-items: center; background: rgba(0,0,0,0.3); border: 1.5px solid var(--border); border-radius: 10px; overflow: hidden; }
+.field-input input { flex: 1; background: transparent; border: none; outline: none; color: #fff; padding: 10px; font-size: 18px; font-weight: 700; width: 100%; }
+.field-unit { padding: 0 10px; font-size: 12px; color: var(--muted); border-left: 1px solid var(--border); }
+.field-tip { font-size: 10px; color: var(--muted); margin-top: 6px; line-height: 1.4; display: block; }
+
+.ratio-row { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 18px; }
+.ratio-btn { padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: transparent; color: #8a96b0; font-size: 11px; cursor: pointer; transition: 0.2s; }
+.ratio-btn.active { border-color: var(--accent); background: var(--accent-dim); color: #fff; }
+
+.section-title.wall-title { color: var(--blue); }
+.field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
+
+.toggle-row { display: flex; gap: 8px; margin-bottom: 20px; }
+.toggle-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: transparent; color: #8a96b0; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
+.toggle-btn.active-yellow { border-color: var(--yellow); color: var(--yellow); background: rgba(245,200,66,0.1); }
+
+.spec-mini { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 15px; }
+.spec-mini td { padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.spec-mini td:last-child { text-align: right; font-weight: 700; color: #fff; }
+
+.info-box { background: rgba(74,158,255,0.08); border: 1px solid rgba(74,158,255,0.2); border-radius: 10px; padding: 12px; font-size: 11px; color: #a8ccf5; line-height: 1.6; }
+
+.right-panel { flex: 1; display: flex; flex-direction: column; background: #080a0f; position: relative; overflow: hidden; }
+.canvas-wrap { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; }
+#mainCanvas { display: block; max-width: 100%; max-height: 100%; cursor: grab; }
+
+.upload-btn-wrap { position: absolute; top: 15px; right: 15px; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
+.upload-btn { padding: 8px 16px; border-radius: 10px; background: rgba(20,24,36,0.85); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 11px; cursor: pointer; backdrop-filter: blur(8px); }
+
+/* 下方結果列 6 欄佈局 (無價格版) */
+.results-bar { 
+  background: var(--panel); border-top: 1px solid var(--border); padding: 15px 20px; 
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; flex-shrink: 0;
+}
+.res-item { text-align: center; border-right: 1px solid var(--border); padding: 0 5px; }
+.res-item:last-child { border-right: none; }
+.res-val { font-size: 16px; font-weight: 900; color: #fff; margin-bottom: 4px; display: block; }
+.res-val.red { color: #ff3b30; }
+.res-val.blue { color: var(--blue); }
+.res-val.yellow { color: var(--yellow); }
+.res-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
+
+@media (max-width: 1024px) {
+  body { overflow-y: auto; }
+  .app { flex-direction: column; height: auto; }
+  .left-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); height: auto; }
+  .left-scroll { overflow-y: visible; }
+  .right-panel { height: 60vh; min-height: 450px; }
+  .results-bar { grid-template-columns: repeat(3, 1fr); gap: 15px 0; }
+  .res-item:nth-child(3n) { border-right: none; }
+  header { height: auto; padding: 12px; flex-wrap: wrap; gap: 10px; }
+  .header-actions { width: 100%; justify-content: space-between; }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .app { flex-direction: row; height: calc(100vh - 60px); }
+  .left-panel { width: 300px; height: 100%; border-bottom: none; border-right: 1px solid var(--border); }
+  .right-panel { height: 100%; }
+  .results-bar { grid-template-columns: repeat(6, 1fr); padding: 10px; }
+}
+
+@media (max-width: 480px) {
+  .results-bar { grid-template-columns: repeat(2, 1fr); }
+  .res-item { border-right: none; }
+  .res-item:nth-child(odd) { border-right: 1px solid var(--border); }
+}
+
+.print-sheet { display: none; }
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  header, .app, .modal-overlay { display: none !important; }
+  .print-sheet { display: block !important; padding: 0; color: #111; font-family: 'Segoe UI', sans-serif; }
+  .ps-page { max-width: 800px; margin: 0 auto; padding: 40px; }
+  .ps-header { border-bottom: 3px solid #e3001b; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+  .ps-sim-img { width: 100%; max-height: 400px; object-fit: contain; background: #000; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
+  .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ps-row { display: flex; justify-content: space-between; background: #f8f9fa; padding: 10px 15px; border-radius: 6px; font-size: 14px; }
+  .ps-val { font-weight: 700; color: #000; }
+  .ps-results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+  .ps-res-card { border: 1.5px solid #eee; padding: 15px; border-radius: 12px; text-align: center; }
+  .ps-res-card.accent { border-color: #007aff; background: #f0f7ff; }
+  .ps-rv { font-size: 18px; font-weight: 900; margin-bottom: 4px; color: #000; }
+  .ps-res-card.accent .ps-rv { color: #e3001b; }
+}
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(6px); z-index: 1000; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal-content { background: #1c2231; border: 1px solid var(--border); border-radius: 16px; width: 450px; max-width: 95vw; padding: 25px; position: relative; }
+.modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #888; font-size: 20px; cursor: pointer; }
+.form-input { width: 100%; background: #000; border: 1px solid var(--border); border-radius: 8px; color: #fff; padding: 12px; margin-bottom: 12px; outline: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="logo.png" alt="PERSONA" class="logo-img" onerror="this.style.display='none'; document.getElementById('logoFallback').style.display='block';">
+    <div id="logoFallback" class="logo-fallback">PERSONA</div>
+    <div class="logo-text">
+      <div>盛源 <em>PERSONA</em></div>
+      <div data-zh="LED 電視牆 · 專業顯示方案" data-en="LED Video Wall Pro">LED 電視牆 · 專業顯示方案</div>
+    </div>
+  </div>
+
+  <div class="header-actions">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="changeLang('zh', this)">中</button>
+      <button class="lang-btn" onclick="changeLang('en', this)">EN</button>
+    </div>
+    <button class="hdr-btn btn-line" onclick="window.open('https://line.me/R/ti/p/@touchpersona', '_blank')"><span>LINE 洽詢</span></button>
+    <button class="hdr-btn btn-pdf" id="btnExport" onclick="exportPDF()"><span>匯出規格</span></button>
+    <button class="hdr-btn btn-primary" id="btnContact" onclick="openContact()"><span>聯繫我們</span></button>
+  </div>
+</header>
+
+<main class="app">
+  <aside class="left-panel">
+    <div class="left-scroll">
+      <div class="section-title" data-zh="產品系列" data-en="Series">產品系列</div>
+      <div class="series-tabs">
+        <button class="series-btn active" data-series="indoor_cob" onclick="selectSeries('indoor_cob', this)"><span class="dot" style="background:#007aff"></span>室內 COB</button>
+        <button class="series-btn" data-series="indoor_gob" onclick="selectSeries('indoor_gob', this)"><span class="dot" style="background:#32d74b"></span>室內 GOB</button>
+      </div>
+
+      <div class="section-title" data-zh="像素間距 選擇" data-en="Pixel Pitch Selection">像素間距 選擇</div>
+      <div id="pitchGrid" class="pitch-grid"></div>
+
+      <div class="section-title" data-zh="螢幕需求尺寸" data-en="Screen Size">螢幕需求尺寸</div>
+      <div class="field-group">
+        <div class="field-input"><input type="number" id="inW" value="3.8" step="0.1" oninput="handleInput('W')"><div class="field-unit">W m</div></div>
+      </div>
+      <div class="field-group">
+        <div class="field-input"><input type="number" id="inH" value="2.14" step="0.1" oninput="handleInput('H')"><div class="field-unit">H m</div></div>
+        <span class="field-tip">※ 實際尺寸會依據 LED 模組整數倍（320x160mm）自動配置最接近數值。</span>
+      </div>
+      <div class="ratio-row">
+        <button class="ratio-btn" onclick="applyRatio(16/9, this)">16:9</button>
+        <button class="ratio-btn" onclick="applyRatio(4/3, this)">4:3</button>
+        <button class="ratio-btn" onclick="applyRatio(21/9, this)">21:9</button>
+        <button class="ratio-btn" onclick="applyRatio(1, this)">1:1</button>
+        <button class="ratio-btn" onclick="applyRatio(9/16, this)">9:16</button>
+      </div>
+
+      <div class="section-title wall-title" data-zh="📐 牆壁尺寸" data-en="📐 Wall Size">📐 牆壁尺寸</div>
+      <div class="field-pair">
+        <div class="field-input"><input type="number" id="wallW" value="6.0" oninput="update()"><div class="field-unit">W</div></div>
+        <div class="field-input"><input type="number" id="wallH" value="3.5" oninput="update()"><div class="field-unit">H</div></div>
+      </div>
+
+      <div class="section-title" data-zh="供電電壓" data-en="Power Supply">供電電壓</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active-yellow" id="volt-110" onclick="setVolt(110, this)">110V</button>
+        <button class="toggle-btn" id="volt-220" onclick="setVolt(220, this)">220V</button>
+      </div>
+
+      <div class="section-title" data-zh="工程詳算" data-en="Engineering">工程詳算</div>
+      <table class="spec-mini">
+        <tr><td data-zh="建議控制盒" data-en="Controller">建議控制盒</td><td id="sp-ctrl" style="color:var(--yellow)">-</td></tr>
+        <tr><td data-zh="總像素點數" data-en="Total Pixels">總像素點數</td><td id="sp-totalPixels">-</td></tr>
+        <tr><td data-zh="最大功耗預估" data-en="Max Power">最大功耗預估</td><td id="sp-power" style="color:var(--yellow)">-</td></tr>
+        <tr><td data-zh="最大電流需求" data-en="Max Current">最大電流需求</td><td id="sp-amp">-</td></tr>
+        <tr style="background:rgba(74,158,255,0.08)"><td style="color:var(--blue); font-weight:700" data-zh="建議施工線數" data-en="Practical Cables">建議施工線數</td><td id="sp-cables" style="color:var(--blue)">-</td></tr>
+      </table>
+      <div class="info-box" id="infoBox"></div>
+    </div>
+  </aside>
+
+  <section class="right-panel">
+    <div class="canvas-wrap" id="cvsWrap">
+      <canvas id="mainCanvas"></canvas>
+      <div class="upload-btn-wrap">
+        <button class="upload-btn" onclick="document.getElementById('fileInBg').click()">🏠 背景</button>
+        <input type="file" id="fileInBg" hidden accept="image/*" onchange="loadPhoto(this, 'bg')">
+        <button class="upload-btn" style="border-color:var(--accent)" onclick="document.getElementById('fileInScreen').click()">📺 內容</button>
+        <input type="file" id="fileInScreen" hidden accept="image/*" onchange="loadPhoto(this, 'screen')">
+      </div>
+    </div>
+
+    <div class="results-bar">
+      <div class="res-item"><span class="res-val" id="res-modules">-</span><span class="res-lbl">模組配置</span></div>
+      <div class="res-item"><span class="res-val red" id="res-total">-</span><span class="res-lbl">總片數</span></div>
+      <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl">解析度</span></div>
+      <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl">實際尺寸</span></div>
+      <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl">對角線</span></div>
+      <div class="res-item" style="background:rgba(74,158,255,0.08); border-radius:8px; padding:5px 0"><span class="res-val blue" id="res-cables">-</span><span class="res-lbl">施工路數</span></div>
+    </div>
+  </section>
+</main>
+
+<div class="print-sheet" id="printSheet">
+  <div class="ps-page">
+    <div class="ps-header">
+      <div class="ps-logo-area">
+        <div style="font-size: 24px; font-weight: 900; color: #e3001b;">盛源 <em>PERSONA</em></div>
+        <div style="font-size: 10px; color: #666;">LED 電視牆專業配置提案</div>
+      </div>
+      <div class="ps-title-area" style="text-align: right;">
+        <h2>產品規格配置報表</h2>
+        <p id="ps-date">報告日期：-</p>
+      </div>
+    </div>
+    <div class="ps-section"><div class="ps-section-title">現場環境合成示意圖</div><img id="ps-sim-img" class="ps-sim-img" src=""></div>
+    <div class="ps-grid">
+      <div class="ps-col">
+        <div class="ps-section-title">基礎參數</div>
+        <div class="ps-row"><span>產品系列</span><span class="ps-val" id="ps-series-print">-</span></div>
+        <div class="ps-row"><span>像素間距</span><span class="ps-val" id="ps-pitch-print">-</span></div>
+        <div class="ps-row"><span>模組尺寸</span><span class="ps-val">320 × 160 mm</span></div>
+      </div>
+      <div class="ps-col">
+        <div class="ps-section-title">工程與供電預留</div>
+        <div class="ps-row"><span>螢幕總像素</span><span class="ps-val" id="ps-totalpix-print">-</span></div>
+        <div class="ps-row"><span>最大功耗預估</span><span class="ps-val" id="ps-power-print">-</span></div>
+        <div class="ps-row"><span>最大電流需求</span><span class="ps-val" id="ps-amp-print">-</span></div>
+        <div class="ps-row"><span>建議施工路數</span><span class="ps-val" id="ps-cables-print">-</span></div>
+      </div>
+    </div>
+    <div class="ps-section-title">配置計算結果</div>
+    <div class="ps-results-grid">
+      <div class="ps-res-card accent"><div class="ps-rv" id="ps-res-mods">-</div><div class="ps-rl">模組配置</div></div>
+      <div class="ps-res-card accent"><div class="ps-rv" id="ps-res-total">-</div><div class="ps-rl">模組總數</div></div>
+      <div class="ps-res-card"><div class="ps-rv" id="ps-res-res">-</div><div class="ps-rl">畫面解析度</div></div>
+      <div class="ps-res-card"><div class="ps-rv" id="ps-res-size">-</div><div class="ps-rl">實際尺寸</div></div>
+      <div class="ps-res-card"><div class="ps-rv" id="ps-res-diag">-</div><div class="ps-rl">對角線</div></div>
+      <div class="ps-res-card"><div class="ps-rv" id="ps-res-cables" style="color:#007aff">-</div><div class="ps-rl">建議網路線數</div></div>
+    </div>
+    <div class="ps-footer">
+      <div>盛源精密工業股份有限公司 PERSONA<br>☎ 02-2290-0882 | 💬 LINE：@touchpersona</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="contactModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeContact()">✕</button>
+    <div style="font-size:18px; font-weight:800; margin-bottom:15px">✉ 聯繫盛源 PERSONA</div>
+    <input type="text" class="form-input" id="c-name" placeholder="姓名 *">
+    <input type="tel" class="form-input" id="c-tel" placeholder="電話 *">
+    <textarea class="form-input" id="c-msg" placeholder="需求詳情..." style="height:100px; width:100%; background:#000; border:1px solid var(--border); border-radius:8px; color:#fff; padding:12px; outline:none;"></textarea>
+    <button class="hdr-btn btn-primary" style="width:100%; justify-content:center; margin-top:10px" onclick="alert('專員將盡快聯繫您！')">提交諮詢</button>
+  </div>
+</div>
+
+<script>
+// ── 數據庫 (僅保留庫存型號：COB 1.53/1.86、GOB 1.86/2.0，高標價格各+200元) ──
+const DB = {
+  indoor_cob: {
+    name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370,
+    info: { zh: '💡 COB 技術：表面平整，防塵防潮，適合近距離觀看。', en: '💡 COB Tech.' },
+    models: [
+      { name: 'P1.53', pitch: 1.53, mW: 208, mH: 104, price: { dealer: [2600, 3000], direct: [3500, 3800] } },
+      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [2200, 2500], direct: [2800, 3200] } }
+    ]
+  },
+  indoor_gob: {
+    name: { zh: '室內 GOB', en: 'Indoor GOB' }, modW: 320, modH: 160, max: 439,
+    info: { zh: '💡 GOB 技術：針對表面增加保護塗層，提升防撞能力。', en: '💡 GOB Tech.' },
+    models: [
+      { name: 'P1.86', pitch: 1.86, mW: 172, mH: 86, price: { dealer: [1800, 2100], direct: [2400, 2800] } },
+      { name: 'P2.0',   pitch: 2.0,  mW: 160, mH: 80, price: { dealer: [1600, 1900], direct: [2000, 2300] } }
+    ]
+  }
+};
+
+let state = { 
+  lang: 'zh', series: 'indoor_cob', modelIdx: 0, volt: 110, currentRatio: 0,
+  bgImg: null, screenImg: null, personImg: null, isPersonLoaded: false 
+};
+
+const canvas = document.getElementById('mainCanvas'), ctx = canvas.getContext('2d');
+let lastCalc = {};
+
+const screenDef = new Image(); screenDef.crossOrigin = "anonymous"; 
+screenDef.src = "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?q=80&w=1280&auto=format&fit=crop";
+screenDef.onload = () => update();
+
+window.onload = () => {
+  init(); window.onresize = init;
+  selectSeries('indoor_cob', document.querySelector('.series-btn'));
+  const pImg = new Image(); pImg.src = "LED計算人物圖.png";
+  pImg.onload = () => { state.personImg = pImg; state.isPersonLoaded = true; update(); };
+  
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(err => {});
+    });
+  }
+};
+
+function init() {
+  const wrap = document.getElementById('cvsWrap');
+  if(!wrap) return;
+  canvas.width = wrap.clientWidth; canvas.height = wrap.clientHeight;
+  update();
+}
+
+function updateText(id, text) { const el = document.getElementById(id); if(el) el.innerText = text; }
+
+function selectSeries(key, btn) {
+  state.series = key; state.modelIdx = 0;
+  document.querySelectorAll('.series-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const grid = document.getElementById('pitchGrid'); grid.innerHTML = '';
+  DB[key].models.forEach((m, i) => {
+    const card = document.createElement('div'); card.className = `pitch-card ${i===0?'active':''}`;
+    card.innerHTML = `<div class="pitch-name">${m.name}</div><div class="pitch-meta">${m.pitch}mm</div>`;
+    card.onclick = () => { document.querySelectorAll('.pitch-card').forEach(c => c.classList.remove('active')); card.classList.add('active'); state.modelIdx = i; update(); };
+    grid.appendChild(card);
+  });
+  update();
+}
+
+function setVolt(v, btn) { state.volt = v; document.querySelectorAll('#volt-110, #volt-220').forEach(b => b.classList.remove('active-yellow')); btn.classList.add('active-yellow'); update(); }
+
+function handleInput(source) {
+  const inW = document.getElementById('inW');
+  const inH = document.getElementById('inH');
+  const r = state.currentRatio;
+  if (r > 0) {
+    if (source === 'W') inH.value = (parseFloat(inW.value) / r).toFixed(2);
+    else inW.value = (parseFloat(inH.value) * r).toFixed(2);
+  }
+  update();
+}
+
+function applyRatio(r, btn) {
+  const isAlreadyActive = btn.classList.contains('active');
+  document.querySelectorAll('.ratio-btn').forEach(b => b.classList.remove('active'));
+  if (isAlreadyActive) state.currentRatio = 0;
+  else {
+    state.currentRatio = r;
+    btn.classList.add('active');
+    handleInput('W');
+  }
+}
+
+function update() {
+  const s = DB[state.series], m = s.models[state.modelIdx];
+  if(!m) return;
+  const reqW = parseFloat(document.getElementById('inW').value) || 3, reqH = parseFloat(document.getElementById('inH').value) || 2;
+  const nW = Math.max(1, Math.round(reqW * 1000 / s.modW)), nH = Math.max(1, Math.round(reqH * 1000 / s.modH));
+  const totalMods = nW * nH;
+  const actW = nW * s.modW / 1000, actH = nH * s.modH / 1000;
+  const resW = nW * m.mW, resH = nH * m.mH;
+  const totalPixels = resW * resH;
+
+  const theoryCables = Math.ceil(totalPixels / 650000);
+  const practicalCables = Math.ceil(theoryCables * 1.2);
+  const ports = [4, 6, 8, 16];
+  let recommendedCtrl = '';
+  const matchedPort = ports.find(p => p >= practicalCables);
+
+  // 當建議控制盒/處理器埠數超過 10，提示需向採購確認
+  if (!matchedPort || matchedPort > 10) {
+    recommendedCtrl = '請再向採購確認';
+  } else {
+    recommendedCtrl = `${matchedPort} 埠控制盒`;
+  }
+
+  const totalPower_W = Math.round(actW * actH * s.max);
+  const amp = (totalPower_W / state.volt).toFixed(1);
+
+  updateText('res-modules', `${nW}×${nH}`);
+  updateText('res-total', `${totalMods}${state.lang==='zh'?'片':'pcs'}`);
+  updateText('res-resolution', `${resW.toLocaleString()}×${resH.toLocaleString()} px`);
+  updateText('res-size', `${actW.toFixed(2)}×${actH.toFixed(2)}m`);
+  updateText('res-diag', (Math.sqrt(actW**2 + actH**2)/0.0254).toFixed(0) + '"');
+  updateText('res-cables', `${practicalCables} 條`);
+
+  updateText('sp-modSize', `${s.modW}×${s.modH}mm`);
+  updateText('sp-totalPixels', `${totalPixels.toLocaleString()} 點`);
+  updateText('sp-power', `${totalPower_W.toLocaleString()} W`);
+  updateText('sp-amp', `${amp} A (${state.volt}V)`);
+  updateText('sp-cables', `${practicalCables} 條`);
+  updateText('sp-ctrl', recommendedCtrl);
+  updateText('infoBox', s.info[state.lang]);
+
+  const wallW = parseFloat(document.getElementById('wallW').value)||6, wallH = parseFloat(document.getElementById('wallH').value)||3.5;
+  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, totalPixels, cables: practicalCables, recommendedCtrl, wallW, wallH, volt: state.volt, totalPower_W, amp };
+  draw(actW, actH, wallW, wallH, nW, nH);
+}
+
+function draw(actW, actH, wallW, wallH, nW, nH) {
+  const W = canvas.width, H = canvas.height; ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#0a0d14'; ctx.fillRect(0,0,W,H);
+  const margin = 80;
+  const scale = Math.min(Math.max(1, W - margin * 2) / Math.max(0.1, wallW), Math.max(1, H - margin * 2) / Math.max(0.1, wallH));
+  if (scale <= 0) return;
+  const dw = wallW * scale, dh = wallH * scale, ox = (W-dw)/2, oy = (H-dh)/2;
+  ctx.fillStyle = '#1a1d26'; ctx.fillRect(ox, oy, dw, dh);
+  if (state.bgImg) ctx.drawImage(state.bgImg, ox, oy, dw, dh);
+  const sw = actW * scale, sh = actH * scale, sx = ox+(dw-sw)/2, sy = oy+(dh-sh)/2;
+  ctx.save(); ctx.beginPath(); ctx.rect(sx, sy, sw, sh); ctx.clip();
+  const activeImg = state.screenImg || screenDef;
+  if (activeImg.complete) {
+    const iAR = activeImg.width / activeImg.height, sAR = sw/sh;
+    let iw, ih; if(iAR > sAR){ih=sh; iw=ih*iAR;} else {iw=sw; ih=iw/iAR;}
+    ctx.drawImage(activeImg, sx+(sw-iw)/2, sy+(sh-ih)/2, iw, ih);
+  }
+  ctx.restore();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.strokeRect(sx, sy, sw, sh);
+  const ph = 1.78 * scale, px = sx - (W < 600 ? 40 : 80), py = oy + dh;
+  if (state.isPersonLoaded && state.personImg) {
+    const pw = ph * (state.personImg.width/state.personImg.height);
+    ctx.drawImage(state.personImg, px - pw/2, py - ph, pw, ph);
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.5)'; ctx.font = '10px Segoe UI'; ctx.textAlign = 'center'; ctx.fillText("178cm / 5'10\"", px, py + 15);
+}
+
+function changeLang(l, btn) { state.lang = l; document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); update(); }
+function loadPhoto(input, type) { if (input.files && input.files[0]) { const r = new FileReader(); r.onload = (e) => { const img = new Image(); img.onload = () => { if (type === 'bg') state.bgImg = img; else state.screenImg = img; update(); }; img.src = e.target.result; }; r.readAsDataURL(input.files[0]); } }
+function openContact() { document.getElementById('contactModal').classList.add('open'); }
+function closeContact() { document.getElementById('contactModal').classList.remove('open'); }
+
+function exportPDF() {
+  const d = lastCalc; if(!d.s) return;
+  updateText('ps-date', `報告日期：${new Date().toLocaleDateString()}`);
+  updateText('ps-series-print', d.s.name.zh);
+  updateText('ps-pitch-print', `${d.m.pitch} mm`);
+  updateText('ps-modsize-print', `320 × 160 mm`);
+  updateText('ps-totalpix-print', `${d.totalPixels.toLocaleString()} px`);
+  updateText('ps-power-print', `${d.totalPower_W.toLocaleString()} W`);
+  updateText('ps-amp-print', `${d.amp} A`);
+  updateText('ps-cables-print', `${d.cables} 條`);
+  updateText('ps-ctrl-print', d.recommendedCtrl);
+  updateText('ps-volt-print', `${d.volt} V`);
+  updateText('ps-wallw-print', `${d.wallW} m`);
+  updateText('ps-wallh-print', `${d.wallH} m`);
+  updateText('ps-res-mods', `${d.nW} × ${d.nH}`);
+  updateText('ps-res-total', `${d.totalMods} 片`);
+  updateText('ps-res-res', `${d.resW.toLocaleString()} × ${d.resH.toLocaleString()} px`);
+  updateText('ps-res-size', `${d.actW.toFixed(2)} × ${d.actH.toFixed(2)} m`);
+  document.getElementById('ps-sim-img').src = canvas.toDataURL('image/png');
+  window.print();
+}
+</script>
+</body>
+</html>
