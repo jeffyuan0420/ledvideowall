@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="logo.png">
 
 <!-- 透過 Data URI 植入 Manifest，確保 PWA 特性在部署後可運作 -->
-<link rel="manifest" href='data:application/manifest+json,{"name":"LED 電視牆配置計算器 Pro (官網公開版)","short_name":"LED計算器","start_url":".","display":"standalone","background_color":"#0b0d12","theme_color":"#0b0d12","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png"}]}'>
+<link rel="manifest" href='data:application/manifest+json,{"name":"LED 電視牆配置計算器 Pro (報價版)","short_name":"LED計算器","start_url":".","display":"standalone","background_color":"#0b0d12","theme_color":"#0b0d12","icons":[{"src":"logo.png","sizes":"192x192","type":"image/png"}]}'>
 
 <style>
 :root {
@@ -108,11 +108,13 @@ header {
 .ratio-btn.active { border-color: var(--accent); background: var(--accent-dim); color: #fff; }
 
 .section-title.wall-title { color: var(--blue); }
+.section-title.price-title { color: var(--green); }
 .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 22px; }
 
 .toggle-row { display: flex; gap: 8px; margin-bottom: 20px; }
 .toggle-btn { flex: 1; padding: 10px; border: 1.5px solid var(--border); border-radius: 10px; background: transparent; color: #8a96b0; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; }
 .toggle-btn.active-yellow { border-color: var(--yellow); color: var(--yellow); background: rgba(245,200,66,0.1); }
+.toggle-btn.active-green { border-color: var(--green); color: var(--green); background: rgba(52, 211, 153, 0.12); }
 
 .spec-mini { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-bottom: 15px; }
 .spec-mini td { padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -127,10 +129,10 @@ header {
 .upload-btn-wrap { position: absolute; top: 15px; right: 15px; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
 .upload-btn { padding: 8px 16px; border-radius: 10px; background: rgba(20,24,36,0.85); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 11px; cursor: pointer; backdrop-filter: blur(8px); }
 
-/* 下方結果列 6 欄佈局 (無價格版) */
+/* 下方結果列 7 欄完整佈局 (含初步報價) */
 .results-bar { 
   background: var(--panel); border-top: 1px solid var(--border); padding: 15px 20px; 
-  display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; flex-shrink: 0;
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; flex-shrink: 0;
 }
 .res-item { text-align: center; border-right: 1px solid var(--border); padding: 0 5px; }
 .res-item:last-child { border-right: none; }
@@ -138,6 +140,7 @@ header {
 .res-val.red { color: #ff3b30; }
 .res-val.blue { color: var(--blue); }
 .res-val.yellow { color: var(--yellow); }
+.res-val.green { color: var(--green); }
 .res-lbl { font-size: 9px; color: var(--muted); text-transform: uppercase; font-weight: 700; }
 
 @media (max-width: 1024px) {
@@ -146,8 +149,8 @@ header {
   .left-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--border); height: auto; }
   .left-scroll { overflow-y: visible; }
   .right-panel { height: 60vh; min-height: 450px; }
-  .results-bar { grid-template-columns: repeat(3, 1fr); gap: 15px 0; }
-  .res-item:nth-child(3n) { border-right: none; }
+  .results-bar { grid-template-columns: repeat(4, 1fr); gap: 15px 0; }
+  .res-item:nth-child(4n) { border-right: none; }
   header { height: auto; padding: 12px; flex-wrap: wrap; gap: 10px; }
   .header-actions { width: 100%; justify-content: space-between; }
 }
@@ -156,7 +159,7 @@ header {
   .app { flex-direction: row; height: calc(100vh - 60px); }
   .left-panel { width: 300px; height: 100%; border-bottom: none; border-right: 1px solid var(--border); }
   .right-panel { height: 100%; }
-  .results-bar { grid-template-columns: repeat(6, 1fr); padding: 10px; }
+  .results-bar { grid-template-columns: repeat(7, 1fr); padding: 10px; }
 }
 
 @media (max-width: 480px) {
@@ -247,6 +250,13 @@ header {
         <div class="field-input"><input type="number" id="wallH" value="3.5" oninput="update()"><div class="field-unit">H</div></div>
       </div>
 
+      <!-- 報價體系選擇 -->
+      <div class="section-title price-title" data-zh="報價體系 (未稅)" data-en="Pricing System">報價體系 (未稅)</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active-green" id="price-dealer" onclick="setPriceType('dealer', this)">經銷價</button>
+        <button class="toggle-btn" id="price-direct" onclick="setPriceType('direct', this)">直銷價</button>
+      </div>
+
       <div class="section-title" data-zh="供電電壓" data-en="Power Supply">供電電壓</div>
       <div class="toggle-row">
         <button class="toggle-btn active-yellow" id="volt-110" onclick="setVolt(110, this)">110V</button>
@@ -257,6 +267,7 @@ header {
       <table class="spec-mini">
         <tr><td data-zh="建議控制盒" data-en="Controller">建議控制盒</td><td id="sp-ctrl" style="color:var(--yellow)">-</td></tr>
         <tr><td data-zh="總像素點數" data-en="Total Pixels">總像素點數</td><td id="sp-totalPixels">-</td></tr>
+        <tr><td data-zh="預估單價" data-en="Unit Price">預估單價</td><td id="sp-unitPrice" style="color:var(--green)">-</td></tr>
         <tr><td data-zh="最大功耗預估" data-en="Max Power">最大功耗預估</td><td id="sp-power" style="color:var(--yellow)">-</td></tr>
         <tr><td data-zh="最大電流需求" data-en="Max Current">最大電流需求</td><td id="sp-amp">-</td></tr>
         <tr style="background:rgba(74,158,255,0.08)"><td style="color:var(--blue); font-weight:700" data-zh="建議施工線數" data-en="Practical Cables">建議施工線數</td><td id="sp-cables" style="color:var(--blue)">-</td></tr>
@@ -276,12 +287,14 @@ header {
       </div>
     </div>
 
+    <!-- 7 欄結果列（含初步報價） -->
     <div class="results-bar">
       <div class="res-item"><span class="res-val" id="res-modules">-</span><span class="res-lbl">模組配置</span></div>
       <div class="res-item"><span class="res-val red" id="res-total">-</span><span class="res-lbl">總片數</span></div>
       <div class="res-item"><span class="res-val" id="res-resolution">-</span><span class="res-lbl">解析度</span></div>
       <div class="res-item"><span class="res-val blue" id="res-size">-</span><span class="res-lbl">實際尺寸</span></div>
       <div class="res-item"><span class="res-val yellow" id="res-diag">-</span><span class="res-lbl">對角線</span></div>
+      <div class="res-item"><span class="res-val green" id="res-price">-</span><span class="res-lbl">初步報價</span></div>
       <div class="res-item" style="background:rgba(74,158,255,0.08); border-radius:8px; padding:5px 0"><span class="res-val blue" id="res-cables">-</span><span class="res-lbl">施工路數</span></div>
     </div>
   </section>
@@ -322,7 +335,7 @@ header {
       <div class="ps-res-card"><div class="ps-rv" id="ps-res-res">-</div><div class="ps-rl">畫面解析度</div></div>
       <div class="ps-res-card"><div class="ps-rv" id="ps-res-size">-</div><div class="ps-rl">實際尺寸</div></div>
       <div class="ps-res-card"><div class="ps-rv" id="ps-res-diag">-</div><div class="ps-rl">對角線</div></div>
-      <div class="ps-res-card"><div class="ps-rv" id="ps-res-cables" style="color:#007aff">-</div><div class="ps-rl">建議網路線數</div></div>
+      <div class="ps-res-card accent" style="background:#f0fff4"><div class="ps-rv" id="ps-res-price" style="color:#10b981">-</div><div class="ps-rl">初步報價預估</div></div>
     </div>
     <div class="ps-footer">
       <div>盛源精密工業股份有限公司 PERSONA<br>☎ 02-2290-0882 | 💬 LINE：@touchpersona</div>
@@ -342,7 +355,7 @@ header {
 </div>
 
 <script>
-// ── 數據庫 (僅保留庫存型號：COB 1.53/1.86、GOB 1.86/2.0，高標價格各+200元) ──
+// ── 數據庫 (僅保留庫存 4 款規格：COB 1.53/1.86、GOB 1.86/2.0，高標價格各+200元) ──
 const DB = {
   indoor_cob: {
     name: { zh: '室內 COB', en: 'Indoor COB' }, modW: 320, modH: 160, max: 370,
@@ -546,7 +559,8 @@ function exportPDF() {
   updateText('ps-res-mods', `${d.nW} × ${d.nH}`);
   updateText('ps-res-total', `${d.totalMods} 片`);
   updateText('ps-res-res', `${d.resW.toLocaleString()} × ${d.resH.toLocaleString()} px`);
-  updateText('ps-res-size', `${d.actW.toFixed(2)} × ${d.actH.toFixed(2)} m`);
+  updateText('ps-res-size', `${d.actW.toFixed(2)} × ${actH.toFixed(2)} m`);
+  updateText('ps-res-price', d.priceStr);
   document.getElementById('ps-sim-img').src = canvas.toDataURL('image/png');
   window.print();
 }
