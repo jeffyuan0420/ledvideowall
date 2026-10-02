@@ -363,7 +363,7 @@ const DB = {
 };
 
 let state = { 
-  lang: 'zh', series: 'indoor_cob', modelIdx: 0, volt: 110, currentRatio: 0,
+  lang: 'zh', series: 'indoor_cob', modelIdx: 0, volt: 110, priceType: 'dealer', currentRatio: 0,
   bgImg: null, screenImg: null, personImg: null, isPersonLoaded: false 
 };
 
@@ -407,6 +407,13 @@ function selectSeries(key, btn) {
     card.onclick = () => { document.querySelectorAll('.pitch-card').forEach(c => c.classList.remove('active')); card.classList.add('active'); state.modelIdx = i; update(); };
     grid.appendChild(card);
   });
+  update();
+}
+
+function setPriceType(type, btn) {
+  state.priceType = type;
+  document.querySelectorAll('#price-dealer, #price-direct').forEach(b => b.classList.remove('active-green'));
+  btn.classList.add('active-green');
   update();
 }
 
@@ -460,15 +467,25 @@ function update() {
   const totalPower_W = Math.round(actW * actH * s.max);
   const amp = (totalPower_W / state.volt).toFixed(1);
 
+  // 報價計算邏輯
+  let priceStr = "專案洽詢", unitPrice = "N/A";
+  if (m.price && m.price[state.priceType]) {
+    const r = m.price[state.priceType];
+    priceStr = r[0] === r[1] ? `${(totalMods * r[0] / 10000).toFixed(1)}萬` : `${(totalMods * r[0] / 10000).toFixed(1)}~${(totalMods * r[1] / 10000).toFixed(1)}萬`;
+    unitPrice = r[0] === r[1] ? `${r[0]}元` : `${r[0]}~${r[1]}元`;
+  }
+
   updateText('res-modules', `${nW}×${nH}`);
   updateText('res-total', `${totalMods}${state.lang==='zh'?'片':'pcs'}`);
   updateText('res-resolution', `${resW.toLocaleString()}×${resH.toLocaleString()} px`);
   updateText('res-size', `${actW.toFixed(2)}×${actH.toFixed(2)}m`);
   updateText('res-diag', (Math.sqrt(actW**2 + actH**2)/0.0254).toFixed(0) + '"');
+  updateText('res-price', priceStr);
   updateText('res-cables', `${practicalCables} 條`);
 
   updateText('sp-modSize', `${s.modW}×${s.modH}mm`);
   updateText('sp-totalPixels', `${totalPixels.toLocaleString()} 點`);
+  updateText('sp-unitPrice', unitPrice);
   updateText('sp-power', `${totalPower_W.toLocaleString()} W`);
   updateText('sp-amp', `${amp} A (${state.volt}V)`);
   updateText('sp-cables', `${practicalCables} 條`);
@@ -476,7 +493,7 @@ function update() {
   updateText('infoBox', s.info[state.lang]);
 
   const wallW = parseFloat(document.getElementById('wallW').value)||6, wallH = parseFloat(document.getElementById('wallH').value)||3.5;
-  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, totalPixels, cables: practicalCables, recommendedCtrl, wallW, wallH, volt: state.volt, totalPower_W, amp };
+  lastCalc = { s, m, nW, nH, totalMods, actW, actH, resW, resH, totalPixels, cables: practicalCables, recommendedCtrl, wallW, wallH, volt: state.volt, totalPower_W, amp, priceStr, unitPrice };
   draw(actW, actH, wallW, wallH, nW, nH);
 }
 
