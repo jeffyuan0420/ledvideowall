@@ -482,15 +482,17 @@ function update() {
   const totalPower_W = Math.round(actW * actH * s.max);
   const amp = (totalPower_W / state.volt).toFixed(1);
 
-  // 報價計算邏輯：若超過 10 埠，總價改為提示直接洽詢採購
+  // 報價計算邏輯：若超過 10 埠，總價與預估單價皆改為提示洽詢採購，防止自行反算
   let priceStr = "專案洽詢", unitPrice = "N/A";
   if (m.price && m.price[state.priceType]) {
     const r = m.price[state.priceType];
-    unitPrice = r[0] === r[1] ? `${r[0]}元` : `${r[0]}~${r[1]}元`;
+    const normalUnitPrice = r[0] === r[1] ? `${r[0]}元` : `${r[0]}~${r[1]}元`;
 
     if (isOver10Ports) {
+      unitPrice = '專案評估 (請洽採購)';
       priceStr = '請洽採購確認';
     } else {
+      unitPrice = normalUnitPrice;
       priceStr = r[0] === r[1] ? `${(totalMods * r[0] / 10000).toFixed(1)}萬` : `${(totalMods * r[0] / 10000).toFixed(1)}~${(totalMods * r[1] / 10000).toFixed(1)}萬`;
     }
   }
